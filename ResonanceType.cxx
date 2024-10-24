@@ -11,7 +11,7 @@ double ResonanceType::GetResonanceTypeWidth() const {
 }
 
 
-void ResonanceType::Print() const override {
+void ResonanceType::Print() const {
     ParticleType::Print();
-    std::cout << fwidth_ << '\n';
+    std::cout << "Resonance: " << fwidth_ << '\n';
 }

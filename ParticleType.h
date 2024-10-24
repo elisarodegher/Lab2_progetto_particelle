@@ -15,7 +15,8 @@ public:
     double GetParticleMass() const;
     int GetParticleCharge() const;
 
-    void Print() const;
+    void virtual Print() const;
+    double virtual GetResonanceTypeWidth() const;
 };
 
 #endif
