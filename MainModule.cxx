@@ -36,7 +36,14 @@ int main()
     TH1F *himpulse = new TH1F("Impulse", "Impulse distribution", 60., 0., 6.);
     TH1F *htrimp = new TH1F("Trasverse Impulse", "Trasverse impulse distribution", 60., 0., 6.);
     TH1F *henergy = new TH1F("Energy", "Energy distrbution", 70., 0., 7.);
-
+    TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution",200., 0., 20. );
+    TH1F *h1_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution",200., 0., 20. );
+    TH1F *h1_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 20.);
+    TH1F *h2_samecharge_invmass = new TH1F("Invariant Mass of k* particles with concordant charge sign", "Invariant Mass of k* particles with concordant charge sign distribution",200., 0., 20.);
+    TH1F *h2_diffcharge_invmass = new TH1F("Invariant Mass of k* particles with discordant charge sign", "Invariant Mass of k* particles with discordant charge sign distribution",200., 0., 20.);
+// senza pedice : tutte le particelle
+// pedice 1 : particelle escludendo le k*
+// pedice 2 : solo particelle k*
 
     for (int i = 0; i < N_events; ++i)
     {
