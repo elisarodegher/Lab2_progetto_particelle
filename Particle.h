@@ -21,6 +21,8 @@ class Particle {
 
 
     public:
+    
+    Particle();
     Particle(char* fName, double fPx, double fPy, double fPz);
     int GetIndex() const;
    

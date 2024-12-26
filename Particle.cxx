@@ -7,6 +7,7 @@ int const Particle::fMaxNumParticleType_ = 10;
 std::vector<ParticleType*> Particle::fParticleType;
 int Particle::fNParticleType_;
 
+Particle::Particle(){};
 
 Particle::Particle(char* fname, double fPx, double fPy, double fPz) :
 fPx_(fPx), fPy_(fPy), fPz_(fPz)
