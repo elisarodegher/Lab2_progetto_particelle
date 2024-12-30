@@ -48,8 +48,7 @@ void Particle::AddParticleType(char *fName, double fMass, int fCharge, double fW
 {
     if (fParticleType.size() >= fMaxNumParticleType_)
     {
-        std::cout << "Cannot add more particle types. Maximum limit reached ("
-                  << fMaxNumParticleType_ << ").\n";
+        std::cout << "Cannot add more particle types. Maximum limit of " << fMaxNumParticleType_ << "reached\n";
         return;
     }
 
