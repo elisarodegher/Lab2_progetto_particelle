@@ -134,7 +134,6 @@ void Particle::SetP(double fPx, double fPy, double fPz)
     fPz_ = fPz;
 }
 
-// fin qui abbiamo fatto noi
 void Particle::PrintArray()
 {
     for (int i = 0; i < static_cast<int>(fParticleType.size()); ++i)
@@ -143,6 +142,7 @@ void Particle::PrintArray()
     }
 }
 
+// fin qui fatto da noi
 void Particle::PrintParticle()
 {
     std::cout << "Index: " << GetIndex() << ", Name: " << fParticleType[fIndex_]->GetParticleName() << ", Impulse: ("
