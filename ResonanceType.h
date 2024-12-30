@@ -11,6 +11,6 @@ private:
 public:
     ResonanceType(char *const fname, double const fmass, int const fcharge, double const fwidth);
     double GetResonanceTypeWidth() const;
-    void Print() const;
+    void virtual Print() const;
 };
 #endif
