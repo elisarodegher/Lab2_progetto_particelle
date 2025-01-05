@@ -20,10 +20,6 @@ int main()
 
     gRandom->SetSeed();
 
-    std::vector<Particle> ParticleArray;
-
-    Particle particle;
-
     int N_events{1E5};
 
     TH1F *hparticletypes = new TH1F("Particle types", "Particle type distribution", 6., 0., 6.);
@@ -38,12 +34,16 @@ int main()
     TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 20.);
     TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.) // valori messi a caso raga
-    // senza pedice : tutte le particelle
-    // pedice 1 : particelle escludendo le k*
-    // pedice 2 : solo particelle k*
+        // senza pedice : tutte le particelle
+        // pedice 1 : particelle escludendo le k*
+        // pedice 2 : solo particelle k*
 
-    for (int i = 0; i < N_events; ++i)
+        for (int i = 0; i < N_events; ++i)
     {
+
+        std::vector<Particle> ParticleArray;
+        Particle particle;
+
         for (int j = 0; j < 100; ++j)
         {
             double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
@@ -98,7 +98,7 @@ int main()
             himpulse->Fill(Impulse);
             htrimp->Fill(trasverse_impulse);
             henergy->Fill(energy);
-            h
+            
                 // gestione della risonanza k*
                 if (particle.GetIndex() == 6)
             {
@@ -155,12 +155,7 @@ int main()
                     h_pk_diffsign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
                 }
 
-
-                //MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
-
-
-
-
+                // MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
 
                 h_all_invmass->Fill(InvMass); // Massa invariante di tutte le particelle
             }
