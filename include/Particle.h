@@ -1,11 +1,13 @@
+#ifndef PARTICLE_HPP
+#define PARTICLE_HPP
+
 #include <vector>
 #include<array>
 
 #include<cassert>
 #include<cmath>
 #include "ResonanceType.h"
-#ifndef PARTICLE_HPP
-#define PARTICLE_HPP
+
 
 
 class Particle {
