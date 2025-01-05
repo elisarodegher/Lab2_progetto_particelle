@@ -142,24 +142,24 @@ void Particle::PrintArray()
     }
 }
 
-// fin qui fatto da noi
 void Particle::PrintParticle()
 {
     std::cout << "Index: " << GetIndex() << ", Name: " << fParticleType[fIndex_]->GetParticleName() << ", Impulse: ("
               << GetPx() << ", " << GetPy() << ", " << GetPz() << ")\n";
 }
+// fin qui fatto da noi
 
-int Particle::Decay2body(Particle &dau1, Particle &dau2) const
+int Particle::Decay2body(Particle &dau1, Particle &dau2) const // metodo che fa decadere una particella in due
 {
 
     double mass = GetMass();
     if (mass == 0.0)
     {
         printf("Decayment cannot be preformed if mass is zero\n");
-        return 1;
+        return 1; // se la massa è nulla ritorna uno
     }
 
-    double massMot = GetMass();
+    double massMot = GetMass(); // massa della "madre"
     double massDau1 = dau1.GetMass();
     double massDau2 = dau2.GetMass();
 
@@ -181,23 +181,23 @@ int Particle::Decay2body(Particle &dau1, Particle &dau2) const
         w = sqrt((-2.0 * log(w)) / w);
         y1 = x1 * w;
 
-        massMot += fParticleType[fIndex_]->GetResonanceTypeWidth() * y1;
+        massMot += fParticleType[fIndex_]->GetResonanceTypeWidth() * y1; // La massa della particella risonante (massMot) viene perturbata aggiungendo una quantità casuale proporzionale a Γ; imita il comportamento reale delle particelle risonanti
     }
 
-    if (massMot < massDau1 + massDau2)
+    if (massMot < massDau1 + massDau2) // controlla che sia effettivamente conservata l'energia
     {
         printf("Decayment cannot be preformed because mass is too low in this channel\n");
         return 2;
     }
-
+    // calcola l'impulso delle figlie "pout"
     double pout = sqrt((massMot * massMot - (massDau1 + massDau2) * (massDau1 + massDau2)) * (massMot * massMot - (massDau1 - massDau2) * (massDau1 - massDau2))) / massMot * 0.5;
 
-    double norm = 2 * M_PI / RAND_MAX;
+    double norm = 2 * M_PI / RAND_MAX; // boh
 
     double phi = rand() * norm;
     double theta = rand() * norm * 0.5 - M_PI / 2.;
-    dau1.SetP(pout * sin(theta) * cos(phi), pout * sin(theta) * sin(phi), pout * cos(theta));
-    dau2.SetP(-pout * sin(theta) * cos(phi), -pout * sin(theta) * sin(phi), -pout * cos(theta));
+    dau1.SetP(pout * sin(theta) * cos(phi), pout * sin(theta) * sin(phi), pout * cos(theta));    // settato l'impulso di p1 con +pout
+    dau2.SetP(-pout * sin(theta) * cos(phi), -pout * sin(theta) * sin(phi), -pout * cos(theta)); // settato l'impulso di p2 con -pout
 
     double energy = sqrt(fPx_ * fPx_ + fPy_ * fPy_ + fPz_ * fPz_ + massMot * massMot);
 
@@ -209,18 +209,21 @@ int Particle::Decay2body(Particle &dau1, Particle &dau2) const
     dau2.Boost(bx, by, bz);
 
     return 0;
-}
+} // fine metodo Decay2Body
+
+// trasformazioni di lorentz per cambiare SDR da quello della madre a quello del laboratorio
+// è void quindi non restituisce nulla ma semplicemente modifica
 void Particle::Boost(double bx, double by, double bz)
 {
 
     double energy = GetEnergy();
 
     // Boost this Lorentz vector
-    double b2 = bx * bx + by * by + bz * bz;
-    double gamma = 1.0 / sqrt(1.0 - b2);
-    double bp = bx * fPx_ + by * fPy_ + bz * fPz_;
-    double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0;
-
+    double b2 = bx * bx + by * by + bz * bz;           // modulo della velocità relativa (aggiunta)
+    double gamma = 1.0 / sqrt(1.0 - b2);               // gamma relativistica
+    double bp = bx * fPx_ + by * fPy_ + bz * fPz_;     // prdotto scalare velocità * impulso
+    double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0; // altro gamma 2(?)
+    // applica la trasformazione
     fPx_ += gamma2 * bp * bx + gamma * bx * energy;
     fPy_ += gamma2 * bp * by + gamma * by * energy;
     fPz_ += gamma2 * bp * bz + gamma * bz * energy;

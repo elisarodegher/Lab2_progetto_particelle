@@ -19,4 +19,4 @@ void ParticleType::Print() const
     std::cout << "Particle: " << fname_ << "\nMass = " << fmass_ << "\nCharge = " << fcharge_ << '\n';
 }
 
-double ParticleType::GetResonanceTypeWidth() const { return 0.;}
+double ParticleType::GetResonanceTypeWidth() const { return 0.;}   //   quello richiesto alla fine del punto 7 che chiama "GetWidth"
