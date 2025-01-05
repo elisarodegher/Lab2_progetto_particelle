@@ -3,6 +3,9 @@
 #include "ResonanceType.h"
 #include <array>
 #include <cmath>
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TMath.h"
 
 int main()
 {
@@ -30,10 +33,11 @@ int main()
     TH1F *htrimp = new TH1F("Trasverse Impulse", "Trasverse impulse distribution", 60., 0., 6.);
     TH1F *henergy = new TH1F("Energy", "Energy distrbution", 70., 0., 7.);
     TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution", 200., 0., 20.);
-    TH1F *h1_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 20.);
-    TH1F *h1_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 20.);
-    TH1F *h2_samecharge_invmass = new TH1F("Invariant Mass of k* particles with concordant charge sign", "Invariant Mass of k* particles with concordant charge sign distribution", 200., 0., 20.);
-    TH1F *h2_diffcharge_invmass = new TH1F("Invariant Mass of k* particles with discordant charge sign", "Invariant Mass of k* particles with discordant charge sign distribution", 200., 0., 20.);
+    TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 20.);
+    TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 20.);
+    TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 20.);
+    TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 20.);
+    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.) // valori messi a caso raga
     // senza pedice : tutte le particelle
     // pedice 1 : particelle escludendo le k*
     // pedice 2 : solo particelle k*
@@ -94,8 +98,9 @@ int main()
             himpulse->Fill(Impulse);
             htrimp->Fill(trasverse_impulse);
             henergy->Fill(energy);
-            // gestione della risonanza k*
-            if (particle.GetIndex() == 6)
+            h
+                // gestione della risonanza k*
+                if (particle.GetIndex() == 6)
             {
                 double x = gRandom->Rndm();
                 if (x < 0.5)
@@ -117,9 +122,48 @@ int main()
             }
         } // fine ciclo di un singolo evento (100 particelle)
 
-        for (int j = 0; j < ParticleArray.size(); j++)
+        for (int j = 0; j < ParticleArray.size(); j++) // esterni dal ciclo del singolo evento
         {
-            hparticletypes->Fill(ParticleArray[j].GetIndex());
+            hparticletypes->Fill(ParticleArray[j].GetIndex()); // riempimento istogramma tipi di particelle
+
+            for (int k = j + 1, k < (ParticleArray.size() - 1), k++)
+            {
+
+                double InvMass = ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
+
+                // controllo carica concorde/ discorde
+                if (j.GetCharge() * k.GetCharge() > 0)
+                {
+                    h_samecharge_invmass->Fill(InvMass);
+                }
+                else
+                {
+                    h_diffcharge_invmass->Fill(InvMass);
+                }
+
+                // Massa invariante di combinazioni (Pione+ / Kaone- e Pione- / Kaone+)
+                if ((ParticleArray[j].GetIndex() == 0 && ParticleArray[k].GetIndex() == 3) ||
+                    (ParticleArray[j].GetIndex() == 1 && ParticleArray[k].GetIndex() == 2))
+                {
+                    h_pk_samesign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone- e pion-/Kaone+
+                }
+
+                // Massa invariante di combinazioni specifiche (Pione+ / Kaone+ e Pione- / Kaone-)
+                if ((ParticleArray[j].GetIndex() == 0 && ParticleArray[k].GetIndex() == 2) ||
+                    (ParticleArray[j].GetIndex() == 1 && ParticleArray[k].GetIndex() == 3))
+                {
+                    h_pk_diffsign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
+                }
+
+
+                //MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
+
+
+
+
+
+                h_all_invmass->Fill(InvMass); // Massa invariante di tutte le particelle
+            }
         }
     }
 }
