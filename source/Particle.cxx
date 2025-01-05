@@ -88,7 +88,7 @@ void Particle::SetIndex(int index)
 void Particle::SetIndex(char *name)
 {
     int index = FindParticle(name);
-    if (index != 11)
+    if (index != -1)
     {
         fIndex_ = index;
     }
