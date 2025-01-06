@@ -14,4 +14,11 @@ int main() {
     for (int i = 0; i < 2; ++i) {
         point_array[i]->Print();
     }
+
+    const ParticleType part_c{n_1_p, 4.5, -1};
+    const ResonanceType res_c{n_2_p, 3.5, 1, 0.5};
+    part_c.Print();
+    res_c.Print();
+
+    //fare test aggiuntivi
 }

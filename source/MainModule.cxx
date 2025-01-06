@@ -46,9 +46,11 @@ int main()
 
         for (int j = 0; j < 100; ++j)
         {
+            //generazione coordinate polari
             double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
             double Theta = gRandom->Rndm() * Tmath::Pi();
             double Impulse = gRandom->Exp(1.);
+            //conversione coordinate cartesiane
             double fPx = Impulse * sin(Theta) * sin(Phi);
             double fPy = Impulse * sin(Theta) * cos(Phi);
             double fPz = Impulse * cos(Theta);
@@ -84,7 +86,7 @@ int main()
             else
             {
                 particle.SetIndex(6); // risonanza k*
-            }
+            } //forse è possible mettere uno switch?
 
             double trasverse_impulse = std::sqrt(fPx * fPx + fPy * fPy); // impulso trasverso
             double energy = particle.GetEnergy();                        // energia
@@ -134,7 +136,7 @@ int main()
         {
             hparticletypes->Fill(ParticleArray[j].GetIndex()); // riempimento istogramma tipi di particelle
 
-            for (int k = j + 1, k < (ParticleArray.size() - 1), k++)
+            for (int k = j + 1; k < (ParticleArray.size() - 1); k++)
             {
 
                 double InvMass = ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
@@ -153,15 +155,15 @@ int main()
                 if ((ParticleArray[j].GetIndex() == 0 && ParticleArray[k].GetIndex() == 3) ||
                     (ParticleArray[j].GetIndex() == 1 && ParticleArray[k].GetIndex() == 2))
                 {
-                    h_pk_samesign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone- e pion-/Kaone+
+                    h_pk_diffsign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone- e pion-/Kaone+
                 }
 
                 // Massa invariante di combinazioni specifiche (Pione+ / Kaone+ e Pione- / Kaone-)
                 if ((ParticleArray[j].GetIndex() == 0 && ParticleArray[k].GetIndex() == 2) ||
                     (ParticleArray[j].GetIndex() == 1 && ParticleArray[k].GetIndex() == 3))
                 {
-                    h_pk_diffsign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
-                }
+                    h_pk_samesign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
+                } //eli qua le avevi invertite? ho corretto
 
                 // MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
 
