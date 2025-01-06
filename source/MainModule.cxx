@@ -34,9 +34,9 @@ int main()
     TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 20.);
     TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.) // valori messi a caso raga
-        // senza pedice : tutte le particelle
-        // pedice 1 : particelle escludendo le k*
-        // pedice 2 : solo particelle k*
+                                                                                                                                                 // senza pedice : tutte le particelle
+                                                                                                                                                 // pedice 1 : particelle escludendo le k*
+                                                                                                                                                 // pedice 2 : solo particelle k*
 
         for (int i = 0; i < N_events; ++i)
     {
@@ -85,8 +85,6 @@ int main()
             {
                 particle.SetIndex(6); // risonanza k*
             }
-            // aggiungo la particella all'array
-            ParticleArray.push_back(particle);
 
             double trasverse_impulse = std::sqrt(fPx * fPx + fPy * fPy); // impulso trasverso
             double energy = particle.GetEnergy();                        // energia
@@ -98,9 +96,9 @@ int main()
             himpulse->Fill(Impulse);
             htrimp->Fill(trasverse_impulse);
             henergy->Fill(energy);
-            
-                // gestione della risonanza k*
-                if (particle.GetIndex() == 6)
+
+            // gestione della risonanza k*
+            if (particle.GetIndex() == 6)
             {
                 double x = gRandom->Rndm();
                 if (x < 0.5)
@@ -110,6 +108,8 @@ int main()
                     particle.Decay2body(pione_pos, kaone_neg);
                     ParticleArray.push_back(pione_pos);
                     ParticleArray.push_back(kaone_neg);
+                    Particle figlia1 = pione_pos;
+                    Particle figlia2 = kaone_neg;
                 }
                 else
                 {
@@ -118,7 +118,15 @@ int main()
                     particle.Decay2body(pione_neg, kaone_pos);
                     ParticleArray.push_back(pione_neg);
                     ParticleArray.push_back(kaone_pos);
+                    Particle figlia1 = pione_neg;
+                    Particle figlia2 = kaone_pos;
                 }
+                double InvMass_decayed = figlia1.GetInvMass(figlia2);
+                h_decayed_invmass->Fill(InvMass_decayed);
+            }
+            else // se non è una k*, non la faccio decadere e la agg. direttamente
+            {
+                ParticleArray.push_back(particle);
             }
         } // fine ciclo di un singolo evento (100 particelle)
 
