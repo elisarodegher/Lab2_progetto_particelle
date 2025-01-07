@@ -85,7 +85,7 @@ void AnalyseInvMass() {
 
     h_invmass_difference -> Fit("FitInvMass");
     h_pk_difference -> Fit("FitPkInvMass");
-    h_decayed_invmass -> Fit("FitDecayedInvmass");
+    h_decayed_invmass -> Fit("FitDecayedInvMass");
 
     std::cout << "Invariant mass difference data: " << std::endl;
     std::cout << "K* mass(mean) = " << FitInvMass -> GetParameter(1) << " +/- " << FitInvMass -> GetParError(1) << std::endl;
@@ -104,4 +104,46 @@ void AnalyseInvMass() {
     std::cout << "K* lenght(sigma) = " << FitDecayedInvMass -> GetParameter(2) << " +/- " << FitDecayedInvMass -> GetParError(2) << std::endl;
     std::cout << "Chisquare = " << FitDecayedInvMass -> GetChisquare() << std::endl;
     std::cout << "Probability of chisquare = " << FitDecayedInvMass -> GetProb() << std::endl;
+}
+
+void ShowInvMassDiagrams() {
+    TFile *FileData = new TFile("Histograms.root");
+
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("h_diffcharge_invmass");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("h_pk_samesign_invmass");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("h_diffsign_invmass");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
+
+    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
+    h_invmass_difference -> Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
+    h_pk_difference -> Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+
+    //modifiche alla cosmetica da fare vedendo il programma eseguito
+
+    TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
+    TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
+    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
+
+    InvMassCanvas -> cd();
+    h_invmass_difference -> Draw();
+
+    PkInvMassCanvas -> cd();
+    h_pk_difference -> Draw();
+
+    DecInvMassCanvas -> cd();
+    h_decayed_invmass -> Draw();
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.pdf");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.pdf");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.pdf");
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.root");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.root");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.root");
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.C");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.C");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.C");
 }
