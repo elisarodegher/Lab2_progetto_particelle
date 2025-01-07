@@ -103,6 +103,11 @@ double Particle::GetPx() const { return fPx_; }
 double Particle::GetPy() const { return fPy_; }
 double Particle::GetPz() const { return fPz_; }
 
+double Particle::GetCharge() const
+{
+    return fParticleType[fIndex_]->GetParticleCharge();
+}
+
 // Getter per la massa della particella
 double Particle::GetMass() const
 {

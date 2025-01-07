@@ -3,11 +3,20 @@
 #include "ResonanceType.h"
 #include <array>
 #include <cmath>
+#include "TCanvas.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TMath.h"
+#include "TRandom.h"
+#include <TApplication.h>
+#include <TFile.h>
+#include <TH1.h>
 
 
 int main()
 {
 
+    double pi = TMath::Pi();
 
     Particle::AddParticleType("p+", 0.13957, 1, 0.);
     Particle::AddParticleType("p-", 0.13957, -1, 0.);
@@ -49,8 +58,8 @@ int main()
     {
         for (int j = 0; j < 100; ++j)
         {
-            double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
-            double Theta = gRandom->Rndm() * Tmath::Pi();
+            double Phi = gRandom->Rndm() * 2 * pi;
+            double Theta = gRandom->Rndm() * pi;
             double Impulse = gRandom->Exp(1.);
             double fPx = Impulse * sin(Theta) * sin(Phi);
             double fPy = Impulse * sin(Theta) * cos(Phi);
@@ -178,7 +187,7 @@ int main()
     {
         for (int j = 0; j < 100; ++j)
         {
-            double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
+            double Phi = gRandom->Rndm() * 2 * pi;
             double Theta = gRandom->Rndm() * Tmath::Pi();
             double Impulse = gRandom->Exp(1.);
             double fPx = Impulse * sin(Theta) * sin(Phi);

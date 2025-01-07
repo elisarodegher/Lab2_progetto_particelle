@@ -3,12 +3,19 @@
 #include "ResonanceType.h"
 #include <array>
 #include <cmath>
+#include "TCanvas.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
+#include "TRandom.h"
+#include <TApplication.h>
+#include <TFile.h>
+#include <TH1.h>
 
 int main()
 {
+
+    double pi = TMath::Pi();
     // char Pi_pos{'Pi+'}, Pi_neg{'Pi-'}, k_pos{'k+'}, k_neg{'k-'}, p_pos{'p+'}, p_neg{'p-'};
     Particle::AddParticleType("Pi+", 0.13957, 1, 0.);
     Particle::AddParticleType("Pi-", 0.13957, -1, 0.);
@@ -48,8 +55,8 @@ int main()
         for (int j = 0; j < 100; ++j)
         {
             // generazione coordinate polari
-            double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
-            double Theta = gRandom->Rndm() * Tmath::Pi();
+            double Phi = gRandom->Rndm() * 2 * pi;
+            double Theta = gRandom->Rndm() * pi;
             double Impulse = gRandom->Exp(1.);
             // conversione coordinate cartesiane
             double fPx = Impulse * sin(Theta) * sin(Phi);
@@ -104,6 +111,8 @@ int main()
             if (particle.GetIndex() == 6)
             {
                 double x = gRandom->Rndm();
+                Particle figlia1;
+                Particle figlia2;
                 if (x < 0.5)
                 {
                     Particle pione_pos("p+", 0., 0., 0.);
@@ -111,8 +120,8 @@ int main()
                     particle.Decay2body(pione_pos, kaone_neg);
                     ParticleArray.push_back(pione_pos);
                     ParticleArray.push_back(kaone_neg);
-                    Particle figlia1 = pione_pos;
-                    Particle figlia2 = kaone_neg;
+                    figlia1 = pione_pos;
+                    figlia2 = kaone_neg;
                 }
                 else
                 {
@@ -121,10 +130,10 @@ int main()
                     particle.Decay2body(pione_neg, kaone_pos);
                     ParticleArray.push_back(pione_neg);
                     ParticleArray.push_back(kaone_pos);
-                    Particle figlia1 = pione_neg;
-                    Particle figlia2 = kaone_pos;
+                    figlia1 = pione_neg;
+                    figlia2 = kaone_pos;
                 }
-                double InvMass_decayed = figlia1.GetInvMass(figlia2);
+                double InvMass_decayed =figlia1.GetInvMass(figlia2);
                 h_decayed_invmass->Fill(InvMass_decayed);
             }
             else // se non è una k*, non la faccio decadere e la agg. direttamente
@@ -172,10 +181,10 @@ int main()
             }
         }
     }
-}
 
 
-TFile *FileData = new TFile ("Histograms.root","RECREATE");
+
+    TFile *FileData = new TFile("Histograms.root", "RECREATE");
 hparticletypes->Write();
 hphi->Write();
 htheta->Write();
@@ -189,3 +198,5 @@ h_pk_samesign_invmass->Write();
 h_pk_diffsign_invmass->Write();
 h_decayed_invmass->Write();
 FileData->Close();
+}
+

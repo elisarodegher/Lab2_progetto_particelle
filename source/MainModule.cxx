@@ -3,14 +3,19 @@
 #include "ResonanceType.h"
 #include <array>
 #include <cmath>
+#include "TCanvas.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
-#include "TFile.h"
-#include "TH1F.h"
+#include "TRandom.h"
+#include <TApplication.h>
+#include <TFile.h>
+#include <TH1.h>
 
 int main()
 {
+
+    double pi = TMath::Pi();
 
     Particle::AddParticleType("p+", 0.13957, 1, 0.);
     Particle::AddParticleType("p-", 0.13957, -1, 0.);
@@ -35,12 +40,12 @@ int main()
     TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 20.);
-    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.) // valori messi a caso raga
-                                                                                                                                                 // senza pedice : tutte le particelle
-                                                                                                                                                 // pedice 1 : particelle escludendo le k*
-                                                                                                                                                 // pedice 2 : solo particelle k*
+    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.); // valori messi a caso raga
+                                                                                                                                                  // senza pedice : tutte le particelle
+                                                                                                                                                  // pedice 1 : particelle escludendo le k*
+                                                                                                                                                  // pedice 2 : solo particelle k*
 
-        for (int i = 0; i < N_events; ++i)
+    for (int i = 0; i < N_events; ++i)
     {
 
         std::vector<Particle> ParticleArray;
@@ -48,11 +53,11 @@ int main()
 
         for (int j = 0; j < 100; ++j)
         {
-            //generazione coordinate polari
-            double Phi = gRandom->Rndm() * 2 * Tmath::Pi();
-            double Theta = gRandom->Rndm() * Tmath::Pi();
+            // generazione coordinate polari
+            double Phi = gRandom->Rndm() * 2 * pi;
+            double Theta = gRandom->Rndm() * pi;
             double Impulse = gRandom->Exp(1.);
-            //conversione coordinate cartesiane
+            // conversione coordinate cartesiane
             double fPx = Impulse * sin(Theta) * sin(Phi);
             double fPy = Impulse * sin(Theta) * cos(Phi);
             double fPz = Impulse * cos(Theta);
@@ -88,7 +93,7 @@ int main()
             else
             {
                 particle.SetIndex(6); // risonanza k*
-            } //forse è possible mettere uno switch?
+            } // forse è possible mettere uno switch?
 
             double trasverse_impulse = std::sqrt(fPx * fPx + fPy * fPy); // impulso trasverso
             double energy = particle.GetEnergy();                        // energia
@@ -105,6 +110,8 @@ int main()
             if (particle.GetIndex() == 6)
             {
                 double x = gRandom->Rndm();
+                Particle figlia1;
+                Particle figlia2;
                 if (x < 0.5)
                 {
                     Particle pione_pos("p+", 0., 0., 0.);
@@ -112,8 +119,8 @@ int main()
                     particle.Decay2body(pione_pos, kaone_neg);
                     ParticleArray.push_back(pione_pos);
                     ParticleArray.push_back(kaone_neg);
-                    Particle figlia1 = pione_pos;
-                    Particle figlia2 = kaone_neg;
+                    figlia1 = pione_pos;
+                    figlia2 = kaone_neg;
                 }
                 else
                 {
@@ -122,8 +129,8 @@ int main()
                     particle.Decay2body(pione_neg, kaone_pos);
                     ParticleArray.push_back(pione_neg);
                     ParticleArray.push_back(kaone_pos);
-                    Particle figlia1 = pione_neg;
-                    Particle figlia2 = kaone_pos;
+                    figlia1 = pione_neg;
+                    figlia2 = kaone_pos;
                 }
                 double InvMass_decayed = figlia1.GetInvMass(figlia2);
                 h_decayed_invmass->Fill(InvMass_decayed);
@@ -165,7 +172,7 @@ int main()
                     (ParticleArray[j].GetIndex() == 1 && ParticleArray[k].GetIndex() == 3))
                 {
                     h_pk_samesign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
-                } //eli qua le avevi invertite? ho corretto
+                } // eli qua le avevi invertite? ho corretto
 
                 // MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
 
