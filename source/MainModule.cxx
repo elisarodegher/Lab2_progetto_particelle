@@ -151,7 +151,7 @@ int main()
                 double InvMass = ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
 
                 // controllo carica concorde/ discorde
-                if (j.GetCharge() * k.GetCharge() > 0)
+                if (ParticleArray[j].GetCharge() * ParticleArray[k].GetCharge() > 0)
                 {
                     h_samecharge_invmass->Fill(InvMass);
                 }
@@ -174,10 +174,24 @@ int main()
                     h_pk_samesign_invmass->Fill(InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
                 } // eli qua le avevi invertite? ho corretto
 
-                // MANCA L'ISTOGRAMMA DELLE PARTICELLE DECADUTE! non so farlo
-
                 h_all_invmass->Fill(InvMass); // Massa invariante di tutte le particelle
             }
         }
     }
+
+       TFile *FileData = new TFile("Histograms.root", "RECREATE");
+hparticletypes->Write();
+hphi->Write();
+htheta->Write();
+himpulse->Write();
+htrimp->Write();
+henergy->Write();
+h_all_invmass->Write();
+h_samecharge_invmass->Write();
+h_diffcharge_invmass->Write();
+h_pk_samesign_invmass->Write();
+h_pk_diffsign_invmass->Write();
+h_decayed_invmass->Write();
+FileData->Close();
 }
+
