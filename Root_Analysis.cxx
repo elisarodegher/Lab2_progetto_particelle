@@ -10,7 +10,7 @@
 void ReadMyRootData()
 {
     // Controllo se le percentuali hanno senso
-    TH1F *FileData = new TH1F("Histograms.root");
+    TFile *FileData = new TFile("Histograms.root");
     TH1F *hparticletypes = (TH1F *)FileData->Get("hparticletypes");
     int N_tot_conteggi = hparticletypes->GetEntries();
 
@@ -63,4 +63,87 @@ void ReadMyRootData()
     std::cout << "Parametri dell'impulso: " << FitImpulse->GetParameter() << " +/- " << FitImpulse->GetParError() << std::endl
               << "Chi quadro ridotto: " << FitImpulse->GetChisquare() << std::endl
               << "Probabilita`: " << FitImpulse->GetProb() << std::endl;
+}
+
+void AnalyseInvMass() {
+    TFile *FileData = new TFile("Histograms.root");
+
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("h_diffcharge_invmass");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("h_pk_samesign_invmass");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("h_diffsign_invmass");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
+
+    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
+    h_invmass_difference -> Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
+    h_pk_difference -> Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+
+    TF1 *FitInvMass = new TF1("FitInvMass", "gaus", 0., 20.);
+    TF1 *FitPkInvMass = new TF1("FitPkInvMass", "gaus", 0., 20.);
+    TF1 *FitDecayedInvMass = new TF1("FitDecayedInvMass", "gaus", 0., 20.);
+
+    h_invmass_difference -> Fit("FitInvMass");
+    h_pk_difference -> Fit("FitPkInvMass");
+    h_decayed_invmass -> Fit("FitDecayedInvMass");
+
+    std::cout << "Invariant mass difference data: " << std::endl;
+    std::cout << "K* mass(mean) = " << FitInvMass -> GetParameter(1) << " +/- " << FitInvMass -> GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitInvMass -> GetParameter(2) << " +/- " << FitInvMass -> GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitInvMass -> GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitInvMass -> GetProb() << std::endl;
+
+    std::cout << "Invariant mass pion/kaon difference data: " << std::endl;
+    std::cout << "K* mass(mean) = " << FitPkInvMass -> GetParameter(1) << " +/- " << FitPkInvMass -> GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitPkInvMass -> GetParameter(2) << " +/- " << FitPkInvMass -> GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitPkInvMass -> GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitPkInvMass -> GetProb() << std::endl;
+
+    std::cout << "Invariant mass decayed particles data: " << std::endl;
+    std::cout << "K* mass(mean) = " << FitDecayedInvMass -> GetParameter(1) << " +/- " << FitDecayedInvMass -> GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitDecayedInvMass -> GetParameter(2) << " +/- " << FitDecayedInvMass -> GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitDecayedInvMass -> GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitDecayedInvMass -> GetProb() << std::endl;
+}
+
+void ShowInvMassDiagrams() {
+    TFile *FileData = new TFile("Histograms.root");
+
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("h_diffcharge_invmass");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("h_pk_samesign_invmass");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("h_diffsign_invmass");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
+
+    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
+    h_invmass_difference -> Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
+    h_pk_difference -> Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+
+    //modifiche alla cosmetica da fare vedendo il programma eseguito
+
+    TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
+    TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
+    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
+
+    InvMassCanvas -> cd();
+    h_invmass_difference -> Draw();
+
+    PkInvMassCanvas -> cd();
+    h_pk_difference -> Draw();
+
+    DecInvMassCanvas -> cd();
+    h_decayed_invmass -> Draw();
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.pdf");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.pdf");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.pdf");
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.root");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.root");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.root");
+
+    InvMassCanvas -> SaveAs("InvMassCanvas.C");
+    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.C");
+    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.C");
 }
