@@ -3,9 +3,15 @@
 #include "ResonanceType.h"
 #include <array>
 #include <cmath>
+#include "TCanvas.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TF1.h"
 #include "TMath.h"
+#include "TRandom.h"
+#include <TApplication.h>
+#include <TFile.h>
+#include <TH1.h>
 
 void ReadMyRootData()
 {
@@ -39,11 +45,14 @@ void ReadMyRootData()
     TH1F *htheta = (TH1F *)FileData->Get("htheta");
     TH1F *hphi = (TH1F *)FileData->Get("hphi");
 
-    TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., 2 * TMath::Pi);
-    TF1 *FitPhi = new TF1("FitPhi", "[0]", 0., 2 * TMath::Pi);
+    double pi = TMath::Pi();
+    TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., 2 * pi);
+    TF1 *FitPhi = new TF1("FitPhi", "[0]", 0., 2 * pi);
 
     htheta->Fit("FitTheta");
     hphi->Fit("FitPhi");
+
+    // a GetParameter() penso vada messo per forza un argomento in input, forse è il parametro 0 ma non sono sicura
 
     std::cout << "Parametri di Theta: " << FitTheta->GetParameter() << " +/- " << FitTheta->GetParError() << std::endl
               << "Chi quadro ridotto: " << FitTheta->GetChisquare() << std::endl
@@ -65,7 +74,8 @@ void ReadMyRootData()
               << "Probabilita`: " << FitImpulse->GetProb() << std::endl;
 }
 
-void AnalyseInvMass() {
+void AnalyseInvMass()
+{
     TFile *FileData = new TFile("Histograms.root");
 
     TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
@@ -75,38 +85,39 @@ void AnalyseInvMass() {
     TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
-    h_invmass_difference -> Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
     TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
-    h_pk_difference -> Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
 
     TF1 *FitInvMass = new TF1("FitInvMass", "gaus", 0., 20.);
     TF1 *FitPkInvMass = new TF1("FitPkInvMass", "gaus", 0., 20.);
     TF1 *FitDecayedInvMass = new TF1("FitDecayedInvMass", "gaus", 0., 20.);
 
-    h_invmass_difference -> Fit("FitInvMass");
-    h_pk_difference -> Fit("FitPkInvMass");
-    h_decayed_invmass -> Fit("FitDecayedInvMass");
+    h_invmass_difference->Fit("FitInvMass");
+    h_pk_difference->Fit("FitPkInvMass");
+    h_decayed_invmass->Fit("FitDecayedInvMass");
 
     std::cout << "Invariant mass difference data: " << std::endl;
-    std::cout << "K* mass(mean) = " << FitInvMass -> GetParameter(1) << " +/- " << FitInvMass -> GetParError(1) << std::endl;
-    std::cout << "K* lenght(sigma) = " << FitInvMass -> GetParameter(2) << " +/- " << FitInvMass -> GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitInvMass -> GetChisquare() << std::endl;
-    std::cout << "Probability of chisquare = " << FitInvMass -> GetProb() << std::endl;
+    std::cout << "K* mass(mean) = " << FitInvMass->GetParameter(1) << " +/- " << FitInvMass->GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitInvMass->GetParameter(2) << " +/- " << FitInvMass->GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitInvMass->GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitInvMass->GetProb() << std::endl;
 
     std::cout << "Invariant mass pion/kaon difference data: " << std::endl;
-    std::cout << "K* mass(mean) = " << FitPkInvMass -> GetParameter(1) << " +/- " << FitPkInvMass -> GetParError(1) << std::endl;
-    std::cout << "K* lenght(sigma) = " << FitPkInvMass -> GetParameter(2) << " +/- " << FitPkInvMass -> GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitPkInvMass -> GetChisquare() << std::endl;
-    std::cout << "Probability of chisquare = " << FitPkInvMass -> GetProb() << std::endl;
+    std::cout << "K* mass(mean) = " << FitPkInvMass->GetParameter(1) << " +/- " << FitPkInvMass->GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitPkInvMass->GetParameter(2) << " +/- " << FitPkInvMass->GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitPkInvMass->GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitPkInvMass->GetProb() << std::endl;
 
     std::cout << "Invariant mass decayed particles data: " << std::endl;
-    std::cout << "K* mass(mean) = " << FitDecayedInvMass -> GetParameter(1) << " +/- " << FitDecayedInvMass -> GetParError(1) << std::endl;
-    std::cout << "K* lenght(sigma) = " << FitDecayedInvMass -> GetParameter(2) << " +/- " << FitDecayedInvMass -> GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitDecayedInvMass -> GetChisquare() << std::endl;
-    std::cout << "Probability of chisquare = " << FitDecayedInvMass -> GetProb() << std::endl;
+    std::cout << "K* mass(mean) = " << FitDecayedInvMass->GetParameter(1) << " +/- " << FitDecayedInvMass->GetParError(1) << std::endl;
+    std::cout << "K* lenght(sigma) = " << FitDecayedInvMass->GetParameter(2) << " +/- " << FitDecayedInvMass->GetParError(2) << std::endl;
+    std::cout << "Chisquare = " << FitDecayedInvMass->GetChisquare() << std::endl;
+    std::cout << "Probability of chisquare = " << FitDecayedInvMass->GetProb() << std::endl;
 }
 
-void ShowInvMassDiagrams() {
+void ShowInvMassDiagrams()
+{
     TFile *FileData = new TFile("Histograms.root");
 
     TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
@@ -116,34 +127,34 @@ void ShowInvMassDiagrams() {
     TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
-    h_invmass_difference -> Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
     TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
-    h_pk_difference -> Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
 
-    //modifiche alla cosmetica da fare vedendo il programma eseguito
+    // modifiche alla cosmetica da fare vedendo il programma eseguito
 
     TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
     TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
     TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
 
-    InvMassCanvas -> cd();
-    h_invmass_difference -> Draw();
+    InvMassCanvas->cd();
+    h_invmass_difference->Draw();
 
-    PkInvMassCanvas -> cd();
-    h_pk_difference -> Draw();
+    PkInvMassCanvas->cd();
+    h_pk_difference->Draw();
 
-    DecInvMassCanvas -> cd();
-    h_decayed_invmass -> Draw();
+    DecInvMassCanvas->cd();
+    h_decayed_invmass->Draw();
 
-    InvMassCanvas -> SaveAs("InvMassCanvas.pdf");
-    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.pdf");
-    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.pdf");
+    InvMassCanvas->SaveAs("InvMassCanvas.pdf");
+    PkInvMassCanvas->SaveAs("PkInvMassCanvas.pdf");
+    DecInvMassCanvas->SaveAs("DecInvMassCanvas.pdf");
 
-    InvMassCanvas -> SaveAs("InvMassCanvas.root");
-    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.root");
-    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.root");
+    InvMassCanvas->SaveAs("InvMassCanvas.root");
+    PkInvMassCanvas->SaveAs("PkInvMassCanvas.root");
+    DecInvMassCanvas->SaveAs("DecInvMassCanvas.root");
 
-    InvMassCanvas -> SaveAs("InvMassCanvas.C");
-    PkInvMassCanvas -> SaveAs("PkInvMassCanvas.C");
-    DecInvMassCanvas -> SaveAs("DecInvMassCanvas.C");
+    InvMassCanvas->SaveAs("InvMassCanvas.C");
+    PkInvMassCanvas->SaveAs("PkInvMassCanvas.C");
+    DecInvMassCanvas->SaveAs("DecInvMassCanvas.C");
 }
