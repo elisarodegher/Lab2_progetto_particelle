@@ -27,7 +27,7 @@ int main()
 
     gRandom->SetSeed();
 
-    int N_events{1E5};
+    int N_events{static_cast<int>(1E5)};
 
     TH1F *hparticletypes = new TH1F("Particle types", "Particle type distribution", 6., 0., 6.);
     TH1F *hphi = new TH1F("Phi angle", "Phi angle distribution", 360., 0., 6.283);
