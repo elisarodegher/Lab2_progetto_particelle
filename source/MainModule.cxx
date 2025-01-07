@@ -22,7 +22,7 @@ int main()
     Particle::AddParticleType("k+", 0.49367, 1, 0.);
     Particle::AddParticleType("k-", 0.49367, -1, 0.);
     Particle::AddParticleType("pr+", 0.93827, 1, 0.);
-    Particle::AddParticleType("pr-", 0.93827, 1, 0.);
+    Particle::AddParticleType("pr-", 0.93827, -1, 0.);
     Particle::AddParticleType("k*", 0.89166, 0, 0.05);
 
     gRandom->SetSeed();
@@ -179,19 +179,18 @@ int main()
         }
     }
 
-       TFile *FileData = new TFile("Histograms.root", "RECREATE");
-hparticletypes->Write();
-hphi->Write();
-htheta->Write();
-himpulse->Write();
-htrimp->Write();
-henergy->Write();
-h_all_invmass->Write();
-h_samecharge_invmass->Write();
-h_diffcharge_invmass->Write();
-h_pk_samesign_invmass->Write();
-h_pk_diffsign_invmass->Write();
-h_decayed_invmass->Write();
-FileData->Close();
+    TFile *FileData = new TFile("Histograms.root", "RECREATE");
+    hparticletypes->Write();
+    hphi->Write();
+    htheta->Write();
+    himpulse->Write();
+    htrimp->Write();
+    henergy->Write();
+    h_all_invmass->Write();
+    h_samecharge_invmass->Write();
+    h_diffcharge_invmass->Write();
+    h_pk_samesign_invmass->Write();
+    h_pk_diffsign_invmass->Write();
+    h_decayed_invmass->Write();
+    FileData->Close();
 }
-
