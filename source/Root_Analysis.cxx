@@ -52,7 +52,7 @@ void ReadMyRootData()
     htheta->Fit("FitTheta");
     hphi->Fit("FitPhi");
 
-    // a GetParameter() penso vada messo per forza un argomento in input, forse è il parametro 0 ma non sono sicura
+    // a GetParameter() penso vada messo per forza un argomento in input, forse è il parametro 0 ma non sono sicura (da eli)
 
     std::cout << "Parametri di Theta: " << FitTheta->GetParameter() << " +/- " << FitTheta->GetParError() << std::endl
               << "Chi quadro ridotto: " << FitTheta->GetChisquare() << std::endl
