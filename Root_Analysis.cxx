@@ -46,7 +46,7 @@ void ReadMyRootData()
     TH1F *hphi = (TH1F *)FileData->Get("hphi");
 
     double pi = TMath::Pi();
-    TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., 2 * pi);
+    TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., pi);
     TF1 *FitPhi = new TF1("FitPhi", "[0]", 0., 2 * pi);
 
     htheta->Fit("FitTheta");
