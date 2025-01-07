@@ -6,6 +6,8 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
+#include "TFile.h"
+#include "TH1F.h"
 
 int main()
 {
