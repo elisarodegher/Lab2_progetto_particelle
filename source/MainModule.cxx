@@ -31,7 +31,7 @@ int main()
 
     int N_events{static_cast<int>(1E5)};
 
-    TH1F *hparticletypes = new TH1F("Particle types", "Particle type distribution", 6., 0., 6.);
+    TH1F *hparticletypes = new TH1F("Particle types", "Particle type distribution", 7, 0., 7.);
     TH1F *hphi = new TH1F("Phi angle", "Phi angle distribution", 360., 0., 6.283);
     TH1F *htheta = new TH1F("Theta angle", "Theta angle distribution", 180., 0., 3.1415);
     TH1F *himpulse = new TH1F("Impulse", "Impulse distribution", 60., 0., 6.);
@@ -42,7 +42,7 @@ int main()
     TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 20.);
     TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 20.);
-    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 20.); // valori messi a caso raga
+    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 4.); // valori messi a caso raga
                                                                                                                                                   // senza pedice : tutte le particelle
                                                                                                                                                   // pedice 1 : particelle escludendo le k*
                                                                                                                                                   // pedice 2 : solo particelle k*
