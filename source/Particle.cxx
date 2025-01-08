@@ -129,9 +129,12 @@ double Particle::GetInvMass(Particle &p) const
     double Px12 = GetPx() + p.GetPx();        // componente x dell'impulso P1+P2
     double Py12 = GetPy() + p.GetPy();        // componente y dell'impulso P1+P2
     double Pz12 = GetPz() + p.GetPz();        // componente z dell'impulso P1+P2
-    double InvMass = std::sqrt((e12) * (e12) - (Px12) * (Px12) + (Py12) * (Py12) + (Pz12) * (Pz12));
+    double InvMass = std::sqrt((e12) * (e12) - (Px12) * (Px12) - (Py12) * (Py12) - (Pz12) * (Pz12));
     return InvMass; // massa invariante
 };
+
+// double InvMass = std::sqrt((e12) * (e12) - (Px12) * (Px12) - (Py12) * (Py12) - (Pz12) * (Pz12));
+
 void Particle::SetP(double fPx, double fPy, double fPz)
 {
     fPx_ = fPx;
