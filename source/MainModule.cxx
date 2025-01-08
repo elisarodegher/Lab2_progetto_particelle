@@ -40,11 +40,11 @@ int main(int argc, char **argv)
     TH1F *himpulse = new TH1F("Impulse", "Impulse distribution", 60., 0., 6.);
     TH1F *htrimp = new TH1F("Trasverse Impulse", "Trasverse impulse distribution", 60., 0., 6.);
     TH1F *henergy = new TH1F("Energy", "Energy distrbution", 70., 0., 7.);
-    TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution", 200., 0., 4.);
-    TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 4.);
-    TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 4.);
-    TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of .... particles with concordant charge sign", "Invariant Mass of ... particles with concordant charge sign distribution", 200., 0., 4.);
-    TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of ... different charge sign", "Invariant Mass of ... particles with discordant charge sign distribution", 200., 0., 4.);
+    TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution", 200., 0., 2.);
+    TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 2.);
+    TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 2.);
+    TH1F *h_pk_samesign_invmass = new TH1F("Invariant Mass of p,k particles with concordant charge sign", "Invariant Mass of p,k particles with concordant charge sign distribution", 200., 0., 2.);
+    TH1F *h_pk_diffsign_invmass = new TH1F("Invariant Mass of p,k particles with different charge sign", "Invariant Mass of p,k particles with different charge sign distribution", 200., 0., 2.);
     TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 4.); // valori messi a caso raga
                                                                                                                                                   // senza pedice : tutte le particelle
                                                                                                                                                   // pedice 1 : particelle escludendo le k*
