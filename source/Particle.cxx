@@ -133,7 +133,6 @@ double Particle::GetInvMass(Particle &p) const
     return InvMass; // massa invariante
 };
 
-// double InvMass = std::sqrt((e12) * (e12) - (Px12) * (Px12) - (Py12) * (Py12) - (Pz12) * (Pz12));
 
 void Particle::SetP(double fPx, double fPy, double fPz)
 {
