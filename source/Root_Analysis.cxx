@@ -1,23 +1,20 @@
-#include "Particle.h"
-#include "ParticleType.h"
-#include "ResonanceType.h"
-#include <array>
-#include <cmath>
-#include "TCanvas.h"
-#include "TH1F.h"
-#include "TH2F.h"
-#include "TF1.h"
-#include "TMath.h"
-#include "TRandom.h"
-#include <TApplication.h>
-#include <TFile.h>
-#include <TH1.h>
+#include "../include/RootAnalysis.h"
+
 
 void ReadMyRootData()
 {
     // Controllo se le percentuali hanno senso
-    TFile *FileData = new TFile("Histograms.root");
-    TH1F *hparticletypes = (TH1F *)FileData->Get("hparticletypes");
+    TFile *FileData = new TFile("Histograms.root", "READ");
+    if (!FileData || FileData->IsZombie()) {
+    std::cerr << "Errore: impossibile aprire il file ROOT!" << std::endl;
+    return;
+}
+FileData -> ls(); //solo per debug
+    TH1F *hparticletypes = (TH1F *)FileData->Get("Particle types");
+    if (!hparticletypes) {
+    std::cerr << "Errore: impossibile trovare l'istogramma hparticletypes!" << std::endl;
+    return;
+}
     int N_tot_conteggi = hparticletypes->GetEntries();
 
     if (N_tot_conteggi < 1E7 || N_tot_conteggi > 1.1E7)
@@ -42,8 +39,8 @@ void ReadMyRootData()
     }
 
     // Fit degli angoli
-    TH1F *htheta = (TH1F *)FileData->Get("htheta");
-    TH1F *hphi = (TH1F *)FileData->Get("hphi");
+    TH1F *htheta = (TH1F *)FileData->Get("Theta angle");
+    TH1F *hphi = (TH1F *)FileData->Get("Phi angle");
 
     double pi = TMath::Pi();
     TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., pi);
@@ -54,35 +51,37 @@ void ReadMyRootData()
 
     // a GetParameter() penso vada messo per forza un argomento in input, forse è il parametro 0 ma non sono sicura (da eli)
 
-    std::cout << "Parametri di Theta: " << FitTheta->GetParameter() << " +/- " << FitTheta->GetParError() << std::endl
+    std::cout << "Parametri di Theta: " << FitTheta->GetParameter(0) << " +/- " << FitTheta->GetParError(0) << std::endl
               << "Chi quadro ridotto: " << FitTheta->GetChisquare() << std::endl
               << "Probabilita`: " << FitTheta->GetProb() << std::endl;
 
-    std::cout << "Parametri di Phi: " << FitPhi->GetParameter() << " +/- " << FitPhi->GetParError() << std::endl
+    std::cout << "Parametri di Phi: " << FitPhi->GetParameter(0) << " +/- " << FitPhi->GetParError(0) << std::endl
               << "Chi quadro ridotto: " << FitPhi->GetChisquare() << std::endl
               << "Probabilita`: " << FitPhi->GetProb() << std::endl;
 
     // Fit dell'impulso
-    TH1F *himpulse = (TH1F *)FileData->Get("himpulse");
+    TH1F *himpulse = (TH1F *)FileData->Get("Impulse");
 
     TF1 *FitImpulse = new TF1("FitImpulse", "expo(0)", 0., 6.);
 
     himpulse->Fit("FitImpulse");
 
-    std::cout << "Parametri dell'impulso: " << FitImpulse->GetParameter() << " +/- " << FitImpulse->GetParError() << std::endl
+    std::cout << "Parametri dell'impulso: " << FitImpulse->GetParameter(0) << " +/- " << FitImpulse->GetParError(0) << std::endl
               << "Chi quadro ridotto: " << FitImpulse->GetChisquare() << std::endl
               << "Probabilita`: " << FitImpulse->GetProb() << std::endl;
+
+    FileData -> Close();
 }
 
 void AnalyseInvMass()
 {
     TFile *FileData = new TFile("Histograms.root");
 
-    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
-    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("h_diffcharge_invmass");
-    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("h_pk_samesign_invmass");
-    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("h_diffsign_invmass");
-    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with concordant charge sign");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with discordant charge sign");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("Invariant Mass of .... particles with concordant charge sign");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("Invariant Mass of ... different charge sign");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
     h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
@@ -114,17 +113,19 @@ void AnalyseInvMass()
     std::cout << "K* lenght(sigma) = " << FitDecayedInvMass->GetParameter(2) << " +/- " << FitDecayedInvMass->GetParError(2) << std::endl;
     std::cout << "Chisquare = " << FitDecayedInvMass->GetChisquare() << std::endl;
     std::cout << "Probability of chisquare = " << FitDecayedInvMass->GetProb() << std::endl;
+
+    FileData -> Close();
 }
 
 void ShowInvMassDiagrams()
 {
     TFile *FileData = new TFile("Histograms.root");
 
-    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("h_samecharge_invmass");
-    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("h_diffcharge_invmass");
-    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("h_pk_samesign_invmass");
-    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("h_diffsign_invmass");
-    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("h_decayed_invmass");
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with concordant charge sign");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with discordant charge sign");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("Invariant Mass of .... particles with concordant charge sign");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("Invariant Mass of ... different charge sign");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
     h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
@@ -157,4 +158,6 @@ void ShowInvMassDiagrams()
     InvMassCanvas->SaveAs("InvMassCanvas.C");
     PkInvMassCanvas->SaveAs("PkInvMassCanvas.C");
     DecInvMassCanvas->SaveAs("DecInvMassCanvas.C");
+
+    FileData -> Close();
 }

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "ParticleType.h"
+#include "../include/ParticleType.h"
 
-ParticleType::ParticleType(char *const fname, double const fmass, int const fcharge) : fname_(fname), fmass_(fmass), fcharge_(fcharge) {};
+ParticleType::ParticleType(const char *fname, double const fmass, int const fcharge) : fname_(fname), fmass_(fmass), fcharge_(fcharge) {};
 char ParticleType::GetParticleName() const
 {
     return *fname_;

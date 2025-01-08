@@ -1,6 +1,7 @@
-#include "Particle.h"
-#include "ParticleType.h"
-#include "ResonanceType.h"
+#include "../include/Particle.h"
+#include "../include/ParticleType.h"
+#include "../include/ResonanceType.h"
+#include "../include/RootAnalysis.h"
 #include <array>
 #include <cmath>
 #include "TCanvas.h"
@@ -18,12 +19,12 @@ int main()
     double pi = TMath::Pi();
 
     Particle::AddParticleType("p+", 0.13957, 1, 0.);
-    Particle::AddParticleType("p-", 0.13957, -1, 0.);
+    Particle::AddParticleType("q-", 0.13957, -1, 0.);
     Particle::AddParticleType("k+", 0.49367, 1, 0.);
-    Particle::AddParticleType("k-", 0.49367, -1, 0.);
-    Particle::AddParticleType("pr+", 0.93827, 1, 0.);
-    Particle::AddParticleType("pr-", 0.93827, -1, 0.);
-    Particle::AddParticleType("k*", 0.89166, 0, 0.05);
+    Particle::AddParticleType("l-", 0.49367, -1, 0.);
+    Particle::AddParticleType("cr+", 0.93827, 1, 0.);
+    Particle::AddParticleType("dr-", 0.93827, -1, 0.);
+    Particle::AddParticleType("e*", 0.89166, 0, 0.05);
 
     gRandom->SetSeed();
 
@@ -99,7 +100,6 @@ int main()
             double energy = particle.GetEnergy();                        // energia
 
             // riempimento istogrammi
-            hparticletypes->Fill(particle.GetIndex());
             hphi->Fill(Phi);
             htheta->Fill(Theta);
             himpulse->Fill(Impulse);
@@ -145,7 +145,7 @@ int main()
         {
             hparticletypes->Fill(ParticleArray[j].GetIndex()); // riempimento istogramma tipi di particelle
 
-            for (int k = j + 1; k < (ParticleArray.size() - 1); k++)
+            for (int k = j + 1; k < (ParticleArray.size()); k++)
             {
 
                 double InvMass = ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
@@ -193,4 +193,8 @@ int main()
     h_pk_diffsign_invmass->Write();
     h_decayed_invmass->Write();
     FileData->Close();
+
+    ReadMyRootData();
+    AnalyseInvMass();
+    ShowInvMassDiagrams();
 }

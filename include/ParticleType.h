@@ -5,12 +5,12 @@ class ParticleType
 {
 
 private:
-    char* const fname_;
+    const char* fname_;
     double const fmass_;
     int const fcharge_;
 
 public:
-    ParticleType(char *fname, double fmass, int fcharge);
+    ParticleType(const char *fname, double fmass, int fcharge);
     char GetParticleName() const;
     double GetParticleMass() const;
     int GetParticleCharge() const;

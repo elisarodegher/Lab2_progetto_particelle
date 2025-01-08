@@ -18,14 +18,14 @@ private:
   double fPx_{0};
   double fPy_{0};
   double fPz_{0};
-  static int FindParticle(char *fName);
+  static int FindParticle(const char *fName);
 
 public:
   Particle();
-  Particle(char *fName, double fPx, double fPy, double fPz);
+  Particle(const char *fName, double fPx, double fPy, double fPz);
   int GetIndex() const;
 
-  static void AddParticleType(char *fName, double fMass, int fCharge, double fWidth);
+  static void AddParticleType(const char *fName, double fMass, int fCharge, double fWidth);
   void SetIndex(int index);
   void SetIndex(char *name);
 

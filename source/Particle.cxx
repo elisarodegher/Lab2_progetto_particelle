@@ -1,5 +1,5 @@
-#include "Particle.h"
-#include "ParticleType.h"
+#include "../include/Particle.h"
+#include "../include/ParticleType.h"
 #include <cmath>   // for M_PI
 #include <cstdlib> //for RAND_MAX
 
@@ -9,7 +9,7 @@ int Particle::fNParticleType_;
 
 Particle::Particle() {};
 
-Particle::Particle(char *fname, double fPx, double fPy, double fPz) : fPx_(fPx), fPy_(fPy), fPz_(fPz)
+Particle::Particle(const char *fname, double fPx, double fPy, double fPz) : fPx_(fPx), fPy_(fPy), fPz_(fPz)
 {
     if (FindParticle(fname) == -1)
     {
@@ -24,7 +24,7 @@ Particle::Particle(char *fname, double fPx, double fPy, double fPz) : fPx_(fPx),
 
 // scorre nel vettore che contiene i tipi di particelle per vedere se trova una corrispondenza di indice con la particella analizzata
 //(data in input tramite nome)
-int Particle::FindParticle(char *fname)
+int Particle::FindParticle(const char *fname)
 {
     for (int i = 0; i < static_cast<int>(fParticleType.size()); i++)
     {
@@ -44,7 +44,7 @@ int Particle::GetIndex() const
 
 // Aggiunge un nuovo tipo di particella, se la particella non viene trovata nel vector di tipi di particelle. (quindi se l'indice è -1)
 // se indice=-1 , controlla se la risonanza è nulla o non nulla per aggiungerla come "resonancetype" o come "particletype"
-void Particle::AddParticleType(char *fName, double fMass, int fCharge, double fWidth)
+void Particle::AddParticleType(const char *fName, double fMass, int fCharge, double fWidth)
 {
     if (fParticleType.size() >= fMaxNumParticleType_)
     {

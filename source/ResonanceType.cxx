@@ -1,8 +1,8 @@
 #include <iostream>
-#include "ResonanceType.h"
+#include "../include/ResonanceType.h"
 
 
-ResonanceType::ResonanceType(char* const fname, double const fmass, int const fcharge, double const fwidth) :
+ResonanceType::ResonanceType(const char *fname, double const fmass, int const fcharge, double const fwidth) :
                ParticleType(fname, fmass, fcharge), fwidth_(fwidth) {};
 
 
