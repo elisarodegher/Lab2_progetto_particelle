@@ -52,11 +52,11 @@ void ReadMyRootData()
     // a GetParameter() penso vada messo per forza un argomento in input, forse è il parametro 0 ma non sono sicura (da eli)
 
     std::cout << "Parametri di Theta: " << FitTheta->GetParameter(0) << " +/- " << FitTheta->GetParError(0) << std::endl
-              << "Chi quadro ridotto: " << FitTheta->GetChisquare() << std::endl
+              << "Chi quadro ridotto: " << (FitTheta->GetChisquare()/FitTheta->GetNDF()) << std::endl
               << "Probabilita`: " << FitTheta->GetProb() << std::endl;
 
     std::cout << "Parametri di Phi: " << FitPhi->GetParameter(0) << " +/- " << FitPhi->GetParError(0) << std::endl
-              << "Chi quadro ridotto: " << FitPhi->GetChisquare() << std::endl
+              << "Chi quadro ridotto: " << (FitPhi->GetChisquare() / FitPhi->GetNDF()) << std::endl
               << "Probabilita`: " << FitPhi->GetProb() << std::endl;
 
     // Fit dell'impulso
@@ -67,7 +67,7 @@ void ReadMyRootData()
     himpulse->Fit("FitImpulse");
 
     std::cout << "Parametri dell'impulso: " << FitImpulse->GetParameter(0) << " +/- " << FitImpulse->GetParError(0) << std::endl
-              << "Chi quadro ridotto: " << FitImpulse->GetChisquare() << std::endl
+              << "Chi quadro ridotto: " << (FitImpulse->GetChisquare()/FitImpulse->GetNDF()) << std::endl
               << "Probabilita`: " << FitImpulse->GetProb() << std::endl;
 
     FileData -> Close();
@@ -99,19 +99,19 @@ void AnalyseInvMass()
     std::cout << "Invariant mass difference data: " << std::endl;
     std::cout << "K* mass(mean) = " << FitInvMass->GetParameter(1) << " +/- " << FitInvMass->GetParError(1) << std::endl;
     std::cout << "K* lenght(sigma) = " << FitInvMass->GetParameter(2) << " +/- " << FitInvMass->GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitInvMass->GetChisquare() << std::endl;
+    std::cout << "Chisquare = " << (FitInvMass->GetChisquare() / FitInvMass->GetNDF()) << std::endl;
     std::cout << "Probability of chisquare = " << FitInvMass->GetProb() << std::endl;
 
     std::cout << "Invariant mass pion/kaon difference data: " << std::endl;
     std::cout << "K* mass(mean) = " << FitPkInvMass->GetParameter(1) << " +/- " << FitPkInvMass->GetParError(1) << std::endl;
     std::cout << "K* lenght(sigma) = " << FitPkInvMass->GetParameter(2) << " +/- " << FitPkInvMass->GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitPkInvMass->GetChisquare() << std::endl;
+    std::cout << "Chisquare = " << (FitPkInvMass->GetChisquare() / FitPkInvMass->GetNDF()) << std::endl;
     std::cout << "Probability of chisquare = " << FitPkInvMass->GetProb() << std::endl;
 
     std::cout << "Invariant mass decayed particles data: " << std::endl;
     std::cout << "K* mass(mean) = " << FitDecayedInvMass->GetParameter(1) << " +/- " << FitDecayedInvMass->GetParError(1) << std::endl;
     std::cout << "K* lenght(sigma) = " << FitDecayedInvMass->GetParameter(2) << " +/- " << FitDecayedInvMass->GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << FitDecayedInvMass->GetChisquare() << std::endl;
+    std::cout << "Chisquare = " << (FitDecayedInvMass->GetChisquare() / FitDecayedInvMass->GetNDF())<< std::endl;
     std::cout << "Probability of chisquare = " << FitDecayedInvMass->GetProb() << std::endl;
 
     FileData -> Close();
