@@ -4,10 +4,10 @@
 void DecInvMassCanvas()
 {
 //=========Macro generated from canvas: DecInvMassCanvas/Decayed particles invariant mass histogram
-//=========  (Wed Jan  8 12:01:27 2025) by ROOT version 6.28/06
+//=========  (Wed Jan  8 12:37:33 2025) by ROOT version 6.28/06
    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram",0,0,900,600);
    DecInvMassCanvas->SetHighLightColor(2);
-   DecInvMassCanvas->Range(-2.5,-6967.538,22.5,62707.84);
+   DecInvMassCanvas->Range(-2.5,-7004.419,22.5,63039.77);
    DecInvMassCanvas->SetFillColor(0);
    DecInvMassCanvas->SetBorderMode(0);
    DecInvMassCanvas->SetBorderSize(2);
@@ -15,13 +15,13 @@ void DecInvMassCanvas()
    DecInvMassCanvas->SetFrameBorderMode(0);
    
    TH1F *InvariantsPMasssPofsPdecayedsPparticles__3 = new TH1F("InvariantsPMasssPofsPdecayedsPparticles__3","Invariant Mass of decayed particles distribution",200,0,20);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(7,5);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(8,3439);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(9,53086);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(10,41590);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(11,1518);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(12,1);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetEntries(99639);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(7,6);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(8,3248);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(9,53367);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(10,41518);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(11,1442);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(12,2);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetEntries(99583);
    
    TPaveStats *ptstats = new TPaveStats(0.78,0.775,0.98,0.935,"brNDC");
    ptstats->SetName("stats");
@@ -31,9 +31,9 @@ void DecInvMassCanvas()
    ptstats->SetTextFont(42);
    TText *ptstats_LaTex = ptstats->AddText("Invariant Mass of decayed particles");
    ptstats_LaTex->SetTextSize(0.0368);
-   ptstats_LaTex = ptstats->AddText("Entries = 99639  ");
-   ptstats_LaTex = ptstats->AddText("Mean  = 0.8916");
-   ptstats_LaTex = ptstats->AddText("Std Dev   = 0.05008");
+   ptstats_LaTex = ptstats->AddText("Entries = 99583  ");
+   ptstats_LaTex = ptstats->AddText("Mean  = 0.8915");
+   ptstats_LaTex = ptstats->AddText("Std Dev   = 0.0499");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(0);
    ptstats->Draw();

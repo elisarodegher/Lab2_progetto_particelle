@@ -35,7 +35,7 @@ FileData -> ls(); //solo per debug
         {
             std::cout << "Il programma e` no bueno :(" << std::endl;
         }
-        ++i;
+        
     }
 
     // Fit degli angoli
@@ -88,9 +88,9 @@ void AnalyseInvMass()
     TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
     h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
 
-    TF1 *FitInvMass = new TF1("FitInvMass", "gaus", 0., 20.);
-    TF1 *FitPkInvMass = new TF1("FitPkInvMass", "gaus", 0., 20.);
-    TF1 *FitDecayedInvMass = new TF1("FitDecayedInvMass", "gaus", 0., 20.);
+    TF1 *FitInvMass = new TF1("FitInvMass", "gaus", 0.6, 1.6);
+    TF1 *FitPkInvMass = new TF1("FitPkInvMass", "gaus", 0.6, 1.6);
+    TF1 *FitDecayedInvMass = new TF1("FitDecayedInvMass", "gaus", 0.6, 1.6);
 
     h_invmass_difference->Fit("FitInvMass");
     h_pk_difference->Fit("FitPkInvMass");
