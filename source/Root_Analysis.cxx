@@ -128,9 +128,9 @@ void ShowInvMassDiagrams()
     TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
-    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    h_invmass_difference->Add(h_diffcharge_invmass, -1);
     TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
-    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+    h_pk_difference->Add(h_pk_diffsign_invmass, -1);
 
     // modifiche alla cosmetica da fare vedendo il programma eseguito
 
