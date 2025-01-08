@@ -4,10 +4,10 @@
 void DecInvMassCanvas()
 {
 //=========Macro generated from canvas: DecInvMassCanvas/Decayed particles invariant mass histogram
-//=========  (Wed Jan  8 13:11:29 2025) by ROOT version 6.28/06
+//=========  (Wed Jan  8 21:58:44 2025) by ROOT version 6.28/06
    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram",0,0,900,600);
    DecInvMassCanvas->SetHighLightColor(2);
-   DecInvMassCanvas->Range(-0.5,-2088.319,4.5,18794.87);
+   DecInvMassCanvas->Range(-0.5,-2068.369,4.5,18615.32);
    DecInvMassCanvas->SetFillColor(0);
    DecInvMassCanvas->SetBorderMode(0);
    DecInvMassCanvas->SetBorderSize(2);
@@ -15,29 +15,30 @@ void DecInvMassCanvas()
    DecInvMassCanvas->SetFrameBorderMode(0);
    
    TH1F *InvariantsPMasssPofsPdecayedsPparticles__3 = new TH1F("InvariantsPMasssPofsPdecayedsPparticles__3","Invariant Mass of decayed particles distribution",200,0,4);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(34,2);
    InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(35,7);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(36,21);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(37,83);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(38,273);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(39,805);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(40,2047);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(41,4362);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(42,7398);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(43,11248);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(44,14280);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(45,15911);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(46,14533);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(47,12046);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(48,8262);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(49,4672);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(50,2279);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(51,1008);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(52,389);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(53,114);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(54,28);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(55,8);
-   InvariantsPMasssPofsPdecayedsPparticles__3->SetEntries(99776);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(36,31);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(37,86);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(38,325);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(39,852);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(40,2057);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(41,4353);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(42,7654);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(43,11317);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(44,14575);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(45,15759);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(46,15000);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(47,11867);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(48,8044);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(49,4818);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(50,2303);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(51,1013);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(52,343);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(53,100);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(54,29);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(55,9);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(56,1);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetBinContent(57,1);
+   InvariantsPMasssPofsPdecayedsPparticles__3->SetEntries(100544);
    
    TPaveStats *ptstats = new TPaveStats(0.78,0.775,0.98,0.935,"brNDC");
    ptstats->SetName("stats");
@@ -47,9 +48,9 @@ void DecInvMassCanvas()
    ptstats->SetTextFont(42);
    TText *ptstats_LaTex = ptstats->AddText("Invariant Mass of decayed particles");
    ptstats_LaTex->SetTextSize(0.0368);
-   ptstats_LaTex = ptstats->AddText("Entries = 99776  ");
-   ptstats_LaTex = ptstats->AddText("Mean  = 0.8918");
-   ptstats_LaTex = ptstats->AddText("Std Dev   = 0.04995");
+   ptstats_LaTex = ptstats->AddText("Entries = 100544 ");
+   ptstats_LaTex = ptstats->AddText("Mean  = 0.8914");
+   ptstats_LaTex = ptstats->AddText("Std Dev   = 0.05002");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(0);
    ptstats->Draw();

@@ -197,5 +197,25 @@ int main()
 
     ReadMyRootData();
     AnalyseInvMass();
-    ShowInvMassDiagrams();
+    //ShowInvMassDiagrams();
+
+    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
+    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
+    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+
+    // modifiche alla cosmetica da fare vedendo il programma eseguito
+
+    TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
+    TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
+    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
+
+    InvMassCanvas->cd();
+    h_invmass_difference->Draw();
+
+    PkInvMassCanvas->cd();
+    h_pk_difference->Draw();
+
+    DecInvMassCanvas->cd();
+    h_decayed_invmass->Draw();
 }

@@ -9,7 +9,6 @@ void ReadMyRootData()
     std::cerr << "Errore: impossibile aprire il file ROOT!" << std::endl;
     return;
 }
-FileData -> ls(); //solo per debug
     TH1F *hparticletypes = (TH1F *)FileData->Get("Particle types");
     if (!hparticletypes) {
     std::cerr << "Errore: impossibile trovare l'istogramma hparticletypes!" << std::endl;
@@ -22,10 +21,10 @@ FileData -> ls(); //solo per debug
         std::cout << "Non va per niente bene!!";
     }
 
-    std::vector<double> aspettative = {0., 0.4, 0.4, 0.045, 0.045, 0.01};
+    std::vector<double> aspettative = {0.4, 0.4, 0.05, 0.05, 0.045, 0.045, 0.01};
     for (int i{1}; hparticletypes->GetBinContent(i) != 0; ++i)
     {
-        double mean = hparticletypes->GetBinContent(i);
+        double mean = hparticletypes->GetBinContent(i) / N_tot_conteggi;
         double sigma = hparticletypes->GetBinError(i);
         if (aspettative[i] <= mean + sigma && mean - sigma <= aspettative[i])
         {
@@ -34,6 +33,7 @@ FileData -> ls(); //solo per debug
         else
         {
             std::cout << "Il programma e` no bueno :(" << std::endl;
+            std::cout << "aspettative: " << aspettative[i] << " e media effettiva: " << mean << "ed errore" << sigma << std::endl;
         }
         
     }
@@ -83,10 +83,10 @@ void AnalyseInvMass()
     TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("Invariant Mass of ... different charge sign");
     TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
 
-    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
-    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
-    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
-    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+    TH1F *h_invmass_difference = new TH1F(*h_diffcharge_invmass);
+    h_invmass_difference->Add(h_diffcharge_invmass, h_samecharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_diffsign_invmass);
+    h_pk_difference->Add(h_pk_diffsign_invmass, h_pk_samesign_invmass, 1, -1);
 
     TF1 *FitInvMass = new TF1("FitInvMass", "gaus", 0.6, 1.6);
     TF1 *FitPkInvMass = new TF1("FitPkInvMass", "gaus", 0.6, 1.6);
@@ -160,4 +160,37 @@ void ShowInvMassDiagrams()
     DecInvMassCanvas->SaveAs("DecInvMassCanvas.C");
 
     FileData -> Close();
+}
+
+void LemmeseeTheGraphs() {
+    TFile *FileData = new TFile("Histograms.root");
+
+    TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with concordant charge sign");
+    TH1F *h_diffcharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with discordant charge sign");
+    TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("Invariant Mass of .... particles with concordant charge sign");
+    TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("Invariant Mass of ... different charge sign");
+    TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
+
+    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
+    h_invmass_difference->Add(h_samecharge_invmass, h_diffcharge_invmass, 1, -1);
+    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
+    h_pk_difference->Add(h_pk_samesign_invmass, h_pk_diffsign_invmass, 1, -1);
+
+    // modifiche alla cosmetica da fare vedendo il programma eseguito
+
+    TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
+    TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
+    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
+
+    InvMassCanvas->cd();
+    h_invmass_difference->Draw();
+
+    PkInvMassCanvas->cd();
+    h_pk_difference->Draw();
+
+    DecInvMassCanvas->cd();
+    h_decayed_invmass->Draw();
+
+    
+
 }
