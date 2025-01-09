@@ -1,6 +1,3 @@
-#include "../include/RootAnalysis.h"
-
-
 void ReadMyRootData()
 {
     // Controllo se le percentuali hanno senso
@@ -100,19 +97,19 @@ void AnalyseInvMass()
     std::cout << "K* mass(mean) = " << FitInvMass->GetParameter(1) << " +/- " << FitInvMass->GetParError(1) << std::endl;
     std::cout << "K* lenght(sigma) = " << FitInvMass->GetParameter(2) << " +/- " << FitInvMass->GetParError(2) << std::endl;
     std::cout << "Chisquare = " << (FitInvMass->GetChisquare() / FitInvMass->GetNDF()) << std::endl;
-    std::cout << "Probability of chisquare = " << FitInvMass->GetProb() << std::endl;
+    std::cout << "Probability of chisquare = " << FitInvMass->GetProb() << endl;
 
     std::cout << "Invariant mass pion/kaon difference data: " << std::endl;
     std::cout << "K* mass(mean) = " << FitPkInvMass->GetParameter(1) << " +/- " << FitPkInvMass->GetParError(1) << std::endl;
     std::cout << "K* lenght(sigma) = " << FitPkInvMass->GetParameter(2) << " +/- " << FitPkInvMass->GetParError(2) << std::endl;
     std::cout << "Chisquare = " << (FitPkInvMass->GetChisquare() / FitPkInvMass->GetNDF()) << std::endl;
-    std::cout << "Probability of chisquare = " << FitPkInvMass->GetProb() << std::endl;
+    std::cout << "Probability of chisquare = " << FitPkInvMass->GetProb() << endl;
 
     std::cout << "Invariant mass decayed particles data: " << std::endl;
-    std::cout << "K* mass(mean) = " << FitDecayedInvMass->GetParameter(1) << " +/- " << FitDecayedInvMass->GetParError(1) << std::endl;
-    std::cout << "K* lenght(sigma) = " << FitDecayedInvMass->GetParameter(2) << " +/- " << FitDecayedInvMass->GetParError(2) << std::endl;
-    std::cout << "Chisquare = " << (FitDecayedInvMass->GetChisquare() / FitDecayedInvMass->GetNDF())<< std::endl;
-    std::cout << "Probability of chisquare = " << FitDecayedInvMass->GetProb() << std::endl;
+    std::cout << "K* mass(mean) = " << FitDecayedInvMass->GetParameter(1) << " +/- " << FitDecayedInvMass->GetParError(1) << endl;
+    std::cout << "K* lenght(sigma) = " << FitDecayedInvMass->GetParameter(2) << " +/- " << FitDecayedInvMass->GetParError(2) << endl;
+    std::cout << "Chisquare = " << (FitDecayedInvMass->GetChisquare() / FitDecayedInvMass->GetNDF())<< endl;
+    std::cout << "Probability of chisquare = " << FitDecayedInvMass->GetProb() << endl;
 
     FileData -> Close();
 }
@@ -127,27 +124,31 @@ void ShowInvMassDiagrams()
     TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("InvMass, pk particles, different sign");
     TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
 
-    TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
-    h_invmass_difference->Add(h_diffcharge_invmass, -1);
-    TH1F *h_pk_difference = new TH1F(*h_pk_samesign_invmass);
-    h_pk_difference->Add(h_pk_diffsign_invmass, -1);
+     TH1F *sub12 = new TH1F("sub12", "sub12", 100, 0, 2);
+  sub12->Add(h_samecharge_invmass, 1);
+  sub12->Add(h_diffcharge_invmass, -1);
+  TCanvas *c5 = new TCanvas("c5", "Subtraction 1 - 2", 200, 10, 600, 400);
 
-    // modifiche alla cosmetica da fare vedendo il programma eseguito
+  TF1 *sub12Fit= new TF1("sub12Fit", "gaus", 0.4, 2);
+  sub12->Fit(sub12Fit);
+  sub12->Draw();
+  sub12->Draw("E,P,SAME");
 
-    TCanvas *InvMassCanvas = new TCanvas("InvMassCanvas", "General invariant mass histogram", 900, 600);
-    TCanvas *PkInvMassCanvas = new TCanvas("PkInvMassCanvas", "Pion/kaon invariant mass histogram", 900, 600);
-    TCanvas *DecInvMassCanvas = new TCanvas("DecInvMassCanvas", "Decayed particles invariant mass histogram", 900, 600);
+  TH1F *sub34 = new TH1F("sub34", "sub34", 100, 0, 2);
+  sub34->Add(h_pk_samesign_invmass, 1);
+  sub34->Add(h_pk_diffsign_invmass, -1);
+  TCanvas *c6 = new TCanvas("c6", "Subtraction 3 - 4", 200, 10, 600, 400);
+    TF1 *sub34Fit= new TF1("sub34Fit", "gaus", 0.6, 1.6);
+    sub34->Fit(sub34Fit);
+    sub34->Draw();
+    sub34->Draw("E,P,SAME");
+    
+  TCanvas *c7 = new TCanvas("c7", "Invariant Mass Decad", 200, 10, 600, 400);
+  h_decayed_invmass->Draw();
+      FileData -> Close();
+}
 
-    InvMassCanvas->cd();
-    h_invmass_difference->Draw();
-
-    PkInvMassCanvas->cd();
-    h_pk_difference->Draw();
-
-    DecInvMassCanvas->cd();
-    h_decayed_invmass->Draw();
-
-    InvMassCanvas->SaveAs("InvMassCanvas.pdf");
+  /*  InvMassCanvas->SaveAs("InvMassCanvas.pdf");
     PkInvMassCanvas->SaveAs("PkInvMassCanvas.pdf");
     DecInvMassCanvas->SaveAs("DecInvMassCanvas.pdf");
 
@@ -157,10 +158,10 @@ void ShowInvMassDiagrams()
 
     InvMassCanvas->SaveAs("InvMassCanvas.C");
     PkInvMassCanvas->SaveAs("PkInvMassCanvas.C");
-    DecInvMassCanvas->SaveAs("DecInvMassCanvas.C");
+    DecInvMassCanvas->SaveAs("DecInvMassCanvas.C"); */
 
-    FileData -> Close();
-}
+    //  FileData -> Close();
+
 
 void LemmeseeTheGraphs() {
     TFile *FileData = new TFile("Histograms2.root");
@@ -190,7 +191,9 @@ void LemmeseeTheGraphs() {
 
     DecInvMassCanvas->cd();
     h_decayed_invmass->Draw();
-
-    
-
+}
+void RootAnalysis() {
+    ReadMyRootData();
+    AnalyseInvMass();
+    ShowInvMassDiagrams();
 }
