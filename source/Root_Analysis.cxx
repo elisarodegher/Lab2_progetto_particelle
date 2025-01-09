@@ -118,7 +118,7 @@ void AnalyseInvMass()
 {
     TFile *FileData = new TFile("Histograms.root");
     //(*)(*) Artan
-    TCanvas *c1 = new TCanvas("c1","c1" 900,600);
+    TCanvas *c1 = new TCanvas("c1","c1" ,900,600);
     c1->Divide(2,1);
 
     TH1F *h_samecharge_invmass = (TH1F *)FileData->Get("Invariant Mass of particles with concordant charge sign");
