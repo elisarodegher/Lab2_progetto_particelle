@@ -41,3 +41,5 @@ TFile**         Histograms.root
   KEY: TH1F     Invariant Mass of decayed particles;1   Invariant Mass of decayed particles distribution
   KEY: TH1F     InvMass, pk particles, same sign;1      Invariant Mass of pk particles with same sign distribution
   KEY: TH1F     InvMass, pk particles, different sign;1 Invariant Mass of pk particles with different sign distribution*/
+
+  /*g++ source/MainModule.cxx source/Root_Analysis.cxx source/ParticleType.cxx source/ResonanceType.cxx source/Particle.cxx -o MainModule $(root-config --cflags --libs)*/

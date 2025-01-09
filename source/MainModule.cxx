@@ -208,8 +208,8 @@ if (!FileData || FileData->IsZombie()) {
     FileData->Close();
     std::cout << "Chiusura file ROOT completata." << std::endl;
 
-   /* ReadMyRootData();
-    AnalyseInvMass();
+ReadMyRootData();
+AnalyseInvMass();
     //ShowInvMassDiagrams();
 
     TH1F *h_invmass_difference = new TH1F(*h_samecharge_invmass);
@@ -230,7 +230,6 @@ if (!FileData || FileData->IsZombie()) {
     h_pk_difference->Draw();
 
     DecInvMassCanvas->cd();
-    h_decayed_invmass->Draw(); */
-
+    h_decayed_invmass->Draw(); 
     app.Run();
 }
