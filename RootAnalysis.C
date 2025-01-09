@@ -1,3 +1,8 @@
+// mi da problemi con le cose di c++ tipo vector e std library
+
+
+
+
 void ReadMyRootData()
 {
     // Controllo se le percentuali hanno senso
