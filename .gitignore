@@ -1,6 +1,8 @@
 c_cpp_properties.json
 
-
+# ignorare i file stampati 
+*.pdf
+*.
 
 # Prerequisites
 *.d
