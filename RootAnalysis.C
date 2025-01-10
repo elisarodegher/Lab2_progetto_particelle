@@ -36,8 +36,8 @@ void RootAnalysis() {
       std::cout << "aspettative: " << aspettative[i]
                 << " e media effettiva: " << mean << "ed errore" << sigma
                 << std::endl;
-    }
-    // Ne balzate una mi sa
+    }// controllo delle proporzioni con cui abbiamo generato le particelle
+
   }
   std::cout << "END OF 1 PUNTO\n\n\n";
 
