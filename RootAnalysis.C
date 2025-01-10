@@ -5,16 +5,19 @@ void RootAnalysis() {
   //Controllo della generazione
   std::cout << "Part 1: control of generation proportions" << std::endl;
   TFile *FileData = new TFile("macros/Lab2_progetto_particelle/Histograms2.root");
-  if (!FileData || FileData->IsZombie()) {
-    std::cerr << "Errore: impossibile aprire il file ROOT!" << std::endl;
-    return;
-  }
-  TH1F *hparticletypes = (TH1F *)FileData->Get("Particle types");
-  if (!hparticletypes) {
-     std::cerr << "Errore: impossibile trovare l'istogramma hparticletypes!"
-               << std::endl;
-     return;
-   } 
+
+  TH1F *hparticletypes = (TH1F *)FileData->Get("Particle types"); // leggo i 4 istogrammi
+    TH1F *htheta = (TH1F *)FileData->Get("Theta angle");
+    TH1F *hphi = (TH1F *)FileData->Get("Phi angle");
+    TH1F *himpulse = (TH1F *)FileData->Get("Impulse");
+
+    if (!hparticletypes || !htheta || !hphi || !himpulse)
+    { // controllo che esistanp
+        std::cerr << "Errore: impossibile trovare uno o più istogrammi!" << std::endl;
+        return;
+    }
+    // check sul conteggio delle particelle
+
   std::cout << "PARTICLE OCCURRENCES" << std::endl;
 
   int N_tot_conteggi = hparticletypes->GetEntries();
@@ -23,8 +26,8 @@ void RootAnalysis() {
     std::cout << "Warning: the number of generated particles does not follow the prevision!" << std::endl;
   }
   std::cout << "Number of occurrences: " << N_tot_conteggi << std::endl;
-  TCanvas *particle_types = new TCanvas("Particle Types", "Particle Types distribution", 200, 10, 600, 400);
-  hparticletypes->Draw();
+
+// check aspettative sulle proporzioni di generazione dei tipi di particelle
   
   std::vector<double> aspettative = {0.4, 0.4, 0.05, 0.05, 0.045, 0.045, 0.01};
   bool error;
@@ -42,27 +45,64 @@ void RootAnalysis() {
     std::cout << "Warning: particles are not generated following the prevision!" << std::endl;
   }
 
-  
-
   std::cout << "End of part 1\n\n\n";
 
-  //Fit degli angoli
-  std::cout << "Part 2: Fit of polar coordinates" << std::endl;
+// Creazione della canvas divisa in 4
+  TCanvas *multiCanvas = new TCanvas("multiCanvas", "Distribuzioni", 800, 800);
+  multiCanvas->Divide(2, 2);
 
-  TH1F *htheta = (TH1F *)FileData->Get("Theta angle");
-  TH1F *hphi = (TH1F *)FileData->Get("Phi angle");
+  // Abbondanza delle particelle
+  multiCanvas->cd(1);
+  hparticletypes->SetLineColor(kBlue);
+  hparticletypes->SetLineWidth(2);
+  hparticletypes->SetXTitle("Particle Type");
+  hparticletypes->SetYTitle("Counts");
+  hparticletypes->GetXaxis()->CenterTitle();
+  hparticletypes->GetYaxis()->CenterTitle();
+  hparticletypes->Draw();   // istogramma dei tipi di particelle
 
+  // Angolo polare
+  multiCanvas->cd(2);
   double pi = TMath::Pi();
-  TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., pi);
-  TF1 *FitPhi = new TF1("FitPhi", "[0]", 0., 2 * pi);
-
-  TCanvas *c1 = new TCanvas("c1", "htheta", 200, 10, 600, 400);
-  htheta->Draw();
+  TF1 *FitTheta = new TF1("FitTheta", "[0]", 0., pi);   // fit di theta
+  htheta->SetLineColor(kRed);
+  htheta->SetLineWidth(2);
+  htheta->SetXTitle("Theta (rad)");
+  htheta->SetYTitle("Counts");
+  htheta->GetXaxis()->CenterTitle();
+  htheta->GetYaxis()->CenterTitle();
   htheta->Fit("FitTheta");
+  htheta->Draw();
 
-  // a GetParameter() penso vada messo per forza un argomento in input, forse è
-  // il parametro 0 ma non sono sicura (da eli)
+  // Angolo azimutale
+  multiCanvas->cd(3);
+  TF1 *FitPhi = new TF1("FitPhi", "[0]", 0., 2 * pi);  // fit di phi
+  hphi->SetLineColor(kGreen);
+  hphi->SetLineWidth(2);
+  hphi->SetXTitle("Phi (rad)");
+  hphi->SetYTitle("Counts");
+  hphi->GetXaxis()->CenterTitle();
+  hphi->GetYaxis()->CenterTitle();
+  hphi->Fit("FitPhi");
+  hphi->Draw();
 
+  // Impulso
+  multiCanvas->cd(4);
+  TF1 *FitImpulse = new TF1("FitImpulse", "expo(0)", 0., 6.);  // fit dell'impulso
+  himpulse->SetLineColor(kMagenta);
+  himpulse->SetLineWidth(2);
+  himpulse->SetXTitle("Impulse (GeV/c)");
+  himpulse->SetYTitle("Counts");
+  himpulse->GetXaxis()->CenterTitle();
+  himpulse->GetYaxis()->CenterTitle();
+  himpulse->Fit("FitImpulse");
+  himpulse->Draw();
+
+  // Miglioramento della leggibilità della statistica
+  gStyle->SetOptStat(1111);
+  gStyle->SetOptFit(1111);
+
+// stampa a schermo dei parametri
   std::cout << "Theta angle parameters: " << FitTheta->GetParameter(0) << " +/- "
             << FitTheta->GetParError(0) << std::endl 
             << "Chisquare: " << FitTheta->GetChisquare() << std::endl
@@ -71,9 +111,6 @@ void RootAnalysis() {
             << (FitTheta->GetChisquare() / FitTheta->GetNDF()) << std::endl
             << "Probability: " << FitTheta->GetProb() << std::endl;
 
-  TCanvas *c2 = new TCanvas("c2", "hphi", 200, 10, 600, 400);
-  hphi->Draw();
-  hphi->Fit("FitPhi");
 
   std::cout << "Phi angle parameters: " << FitPhi->GetParameter(0) << " +/- "
             << FitPhi->GetParError(0) << std::endl
@@ -83,14 +120,6 @@ void RootAnalysis() {
             << (FitPhi->GetChisquare() / FitPhi->GetNDF()) << std::endl
             << "Probability: " << FitPhi->GetProb() << std::endl;
 
-  // Fit dell'impulso
-  TH1F *himpulse = (TH1F *)FileData->Get("Impulse");
-
-  TF1 *FitImpulse = new TF1("FitImpulse", "expo(0)", 0., 6.);
-
-  TCanvas *c3 = new TCanvas("c3", "himpulse", 200, 10, 600, 400);
-  himpulse->Draw();
-  himpulse->Fit("FitImpulse");
 
   std::cout << "Impulse parameters: " << FitImpulse->GetParameter(0)
             << " +/- " << FitImpulse->GetParError(0) << std::endl
