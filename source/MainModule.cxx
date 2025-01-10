@@ -14,21 +14,19 @@
 #include <TFile.h>
 #include <TH1.h>
 
-
-
 int main(int argc, char **argv)
 {
     TApplication app("app", &argc, argv);
 
     double pi = TMath::Pi();
 
-    Particle::AddParticleType("a", 0.13957, 1, 0.); //p+
-    Particle::AddParticleType("b", 0.13957, -1, 0.); //p-
-    Particle::AddParticleType("c", 0.49367, 1, 0.); //k+
-    Particle::AddParticleType("d", 0.49367, -1, 0.); //k-
-    Particle::AddParticleType("e", 0.93827, 1, 0.); //pr+
-    Particle::AddParticleType("f", 0.93827, -1, 0.); //pr-
-    Particle::AddParticleType("g", 0.89166, 0, 0.05); //k*
+    Particle::AddParticleType("a", 0.13957, 1, 0.);   // p+
+    Particle::AddParticleType("b", 0.13957, -1, 0.);  // p-
+    Particle::AddParticleType("c", 0.49367, 1, 0.);   // k+
+    Particle::AddParticleType("d", 0.49367, -1, 0.);  // k-
+    Particle::AddParticleType("e", 0.93827, 1, 0.);   // pr+
+    Particle::AddParticleType("f", 0.93827, -1, 0.);  // pr-
+    Particle::AddParticleType("g", 0.89166, 0, 0.05); // k*
 
     gRandom->SetSeed();
 
@@ -44,10 +42,12 @@ int main(int argc, char **argv)
 
     TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 4.);
     TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 4.);
-
+    h_samecharge_invmass->Sumw2();
+    h_diffcharge_invmass->Sumw2();
     TH1F *h_pk_samesign_invmass = new TH1F("InvMass, pk particles, same sign", "Invariant Mass of pk particles with same sign distribution", 200., 0., 4.);
     TH1F *h_pk_diffsign_invmass = new TH1F("InvMass, pk particles, different sign", "Invariant Mass of pk particles with different sign distribution", 200., 0., 4.);
-
+    h_pk_diffsign_invmass->Sumw2();
+    h_pk_samesign_invmass->Sumw2();
     TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 4.);
 
     for (int i = 0; i < N_events; ++i)
@@ -145,93 +145,100 @@ int main(int argc, char **argv)
             }
         } // fine ciclo di un singolo evento (100 particelle)
 
-         for (int j = 0; j < ParticleArray.size();
-         j++) // esterni dal ciclo del singolo evento
-    {
-      hparticletypes->Fill(
-          ParticleArray[j]
-              .GetIndex()); // riempimento istogramma tipi di particelle
+        for (int j = 0; j < ParticleArray.size();
+             j++) // esterni dal ciclo del singolo evento
+        {
+            hparticletypes->Fill(
+                ParticleArray[j]
+                    .GetIndex()); // riempimento istogramma tipi di particelle
 
-      for (int k = j + 1; k < (ParticleArray.size()); k++) {
+            for (int k = j + 1; k < (ParticleArray.size()); k++)
+            {
 
-        double InvMass =
-            ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
+                double InvMass =
+                    ParticleArray[j].GetInvMass(ParticleArray[k]); // massa invariante
 
-        // controllo carica concorde/ discorde
-        if (ParticleArray[j].GetCharge() * ParticleArray[k].GetCharge() > 0) {
-          h_samecharge_invmass->Fill(InvMass);
-        } else {
-          h_diffcharge_invmass->Fill(InvMass);
+                // controllo carica concorde/ discorde
+                if (ParticleArray[j].GetCharge() * ParticleArray[k].GetCharge() > 0)
+                {
+                    h_samecharge_invmass->Fill(InvMass);
+                }
+                else
+                {
+                    h_diffcharge_invmass->Fill(InvMass);
+                }
+
+                // Massa invariante di combinazioni (Pione+ / Kaone- e Pione- / Kaone+)
+                if ((ParticleArray[j].GetIndex() == 0 &&
+                     ParticleArray[k].GetIndex() == 3) ||
+                    (ParticleArray[j].GetIndex() == 1 &&
+                     ParticleArray[k].GetIndex() == 2))
+                {
+                    h_pk_diffsign_invmass->Fill(
+                        InvMass); // Massa invariante tra pion+/Kaone- e pion-/Kaone+
+                }
+
+                // Massa invariante di combinazioni specifiche (Pione+ / Kaone+ e Pione-
+                // / Kaone-)
+                if ((ParticleArray[j].GetIndex() == 0 &&
+                     ParticleArray[k].GetIndex() == 2) ||
+                    (ParticleArray[j].GetIndex() == 1 &&
+                     ParticleArray[k].GetIndex() == 3))
+                {
+                    h_pk_samesign_invmass->Fill(
+                        InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
+                } // eli qua le avevi invertite? ho corretto
+
+                h_all_invmass->Fill(InvMass); // Massa invariante di tutte le particelle
+            }
         }
-
-        // Massa invariante di combinazioni (Pione+ / Kaone- e Pione- / Kaone+)
-        if ((ParticleArray[j].GetIndex() == 0 &&
-             ParticleArray[k].GetIndex() == 3) ||
-            (ParticleArray[j].GetIndex() == 1 &&
-             ParticleArray[k].GetIndex() == 2)) {
-          h_pk_diffsign_invmass->Fill(
-              InvMass); // Massa invariante tra pion+/Kaone- e pion-/Kaone+
-        }
-
-        // Massa invariante di combinazioni specifiche (Pione+ / Kaone+ e Pione-
-        // / Kaone-)
-        if ((ParticleArray[j].GetIndex() == 0 &&
-             ParticleArray[k].GetIndex() == 2) ||
-            (ParticleArray[j].GetIndex() == 1 &&
-             ParticleArray[k].GetIndex() == 3)) {
-          h_pk_samesign_invmass->Fill(
-              InvMass); // Massa invariante tra pion+/Kaone+ e pion-/Kaone-
-        } // eli qua le avevi invertite? ho corretto
-
-        h_all_invmass->Fill(InvMass); // Massa invariante di tutte le particelle
-      }
     }
-  }
 
-  TCanvas *c0 = new TCanvas("c0", "hparticletypes", 200, 10, 600, 400);
-  hparticletypes->Draw();
-  TCanvas *c1 = new TCanvas("c1", "hphi", 200, 10, 600, 400);
-  hphi->Draw();
-  TCanvas *c2 = new TCanvas("c2", "htheta", 200, 10, 600, 400);
-  htheta->Draw();
-  TCanvas *c3 = new TCanvas("c3", "himpulse", 200, 10, 600, 400);
-  himpulse->Draw();
-  TCanvas *c4 = new TCanvas("c4", "htrimp", 200, 10, 600, 400);
-  htrimp->Draw();
-  TCanvas *c5 = new TCanvas("c5", "henergy", 200, 10, 600, 400);
-  henergy->Draw();
-  TCanvas *c6 = new TCanvas("c6", "h_all_invmass", 200, 10, 600, 400);
-  h_all_invmass->Draw();
-  TCanvas *c7 = new TCanvas("c7", "h_samecharge_invmass", 200, 10, 600, 400);
-  h_samecharge_invmass->Draw();
-  TCanvas *c8 = new TCanvas("c8", "h_diffcharge_invmass", 200, 10, 600, 400);
-  h_diffcharge_invmass->Draw();
-  TCanvas *c9 = new TCanvas("c9", "h_pk_samesign_invmass", 200, 10, 600, 400);
-  h_pk_samesign_invmass->Draw();
-  TCanvas *c10 = new TCanvas("c10", "h_pk_diffsign_invmass", 200, 10, 600, 400);
-  h_pk_diffsign_invmass->Draw();
-  TCanvas *c11 = new TCanvas("c11", " h_decayed_invmass", 200, 10, 600, 400);
-  h_decayed_invmass->Draw();
-  TFile *FileData = new TFile("Histograms2.root", "RECREATE");
+    TCanvas *c0 = new TCanvas("c0", "hparticletypes", 200, 10, 600, 400);
+    hparticletypes->Draw();
+    TCanvas *c1 = new TCanvas("c1", "hphi", 200, 10, 600, 400);
+    hphi->Draw();
+    TCanvas *c2 = new TCanvas("c2", "htheta", 200, 10, 600, 400);
+    htheta->Draw();
+    TCanvas *c3 = new TCanvas("c3", "himpulse", 200, 10, 600, 400);
+    himpulse->Draw();
+    TCanvas *c4 = new TCanvas("c4", "htrimp", 200, 10, 600, 400);
+    htrimp->Draw();
+    TCanvas *c5 = new TCanvas("c5", "henergy", 200, 10, 600, 400);
+    henergy->Draw();
+    TCanvas *c6 = new TCanvas("c6", "h_all_invmass", 200, 10, 600, 400);
+    h_all_invmass->Draw();
+    TCanvas *c7 = new TCanvas("c7", "h_samecharge_invmass", 200, 10, 600, 400);
+    h_samecharge_invmass->Draw();
+    TCanvas *c8 = new TCanvas("c8", "h_diffcharge_invmass", 200, 10, 600, 400);
+    h_diffcharge_invmass->Draw();
+    TCanvas *c9 = new TCanvas("c9", "h_pk_samesign_invmass", 200, 10, 600, 400);
+    h_pk_samesign_invmass->Draw();
+    TCanvas *c10 = new TCanvas("c10", "h_pk_diffsign_invmass", 200, 10, 600, 400);
+    h_pk_diffsign_invmass->Draw();
+    TCanvas *c11 = new TCanvas("c11", " h_decayed_invmass", 200, 10, 600, 400);
+    h_decayed_invmass->Draw();
+    TFile *FileData = new TFile("Histograms2.root", "RECREATE");
 
-  if (!FileData || FileData->IsZombie()) {
-    std::cout << "Errore: impossibile creare il file ROOT!" << std::endl;
-    return 0;
-  }
-  hparticletypes->Write();
-  hphi->Write();
-  htheta->Write();
-  himpulse->Write();
-  htrimp->Write();
-  henergy->Write();
-  h_all_invmass->Write();
-  h_samecharge_invmass->Write();
-  h_diffcharge_invmass->Write();
-  h_pk_samesign_invmass->Write();
-  h_pk_diffsign_invmass->Write();
-  h_decayed_invmass->Write();
-  FileData->Close();
-  std::cout << "Chiusura file ROOT completata." << std::endl;
+    if (!FileData || FileData->IsZombie())
+    {
+        std::cout << "Errore: impossibile creare il file ROOT!" << std::endl;
+        return 0;
+    }
+    hparticletypes->Write();
+    hphi->Write();
+    htheta->Write();
+    himpulse->Write();
+    htrimp->Write();
+    henergy->Write();
+    h_all_invmass->Write();
+    h_samecharge_invmass->Write();
+    h_diffcharge_invmass->Write();
+    h_pk_samesign_invmass->Write();
+    h_pk_diffsign_invmass->Write();
+    h_decayed_invmass->Write();
+    FileData->Close();
+    std::cout << "Chiusura file ROOT completata." << std::endl;
 
-  app.Run();
+    app.Run();
 }

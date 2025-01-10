@@ -4,8 +4,8 @@
 void Distributions()
 {
 //=========Macro generated from canvas: multiCanvas/Distribuzioni
-//=========  (Fri Jan 10 18:34:44 2025) by ROOT version 6.28/06
-   TCanvas *multiCanvas = new TCanvas("multiCanvas", "Distribuzioni",956,119,800,800);
+//=========  (Fri Jan 10 22:06:30 2025) by ROOT version 6.28/06
+   TCanvas *multiCanvas = new TCanvas("multiCanvas", "Distribuzioni",565,145,800,800);
    gStyle->SetOptFit(1);
    multiCanvas->Range(0,0,1,1);
    multiCanvas->SetFillColor(0);

@@ -4,8 +4,8 @@
 void InvMassCanvas()
 {
 //=========Macro generated from canvas: multiCanvas2/Distribuzioni
-//=========  (Fri Jan 10 18:34:44 2025) by ROOT version 6.28/06
-   TCanvas *multiCanvas2 = new TCanvas("multiCanvas2", "Distribuzioni",838,139,800,800);
+//=========  (Fri Jan 10 22:06:31 2025) by ROOT version 6.28/06
+   TCanvas *multiCanvas2 = new TCanvas("multiCanvas2", "Distribuzioni",879,91,800,800);
    gStyle->SetOptFit(1);
    multiCanvas2->Range(0,0,1,1);
    multiCanvas2->SetFillColor(0);
