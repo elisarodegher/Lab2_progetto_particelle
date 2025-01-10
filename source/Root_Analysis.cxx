@@ -3,6 +3,7 @@
 
 void ReadMyRootData()
 {
+    gSystem->ChangeDirectory("macros/Lab2_progetto_particelle");
     // Controllo se le percentuali hanno senso
     TFile *FileData = new TFile("Histograms2.root", "READ");
     if (!FileData || FileData->IsZombie()) {

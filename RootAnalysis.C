@@ -137,19 +137,47 @@ void RootAnalysis() {
   TH1F *h_pk_samesign_invmass = (TH1F *)FileData->Get("InvMass, pk particles, same sign");
   TH1F *h_pk_diffsign_invmass = (TH1F *)FileData->Get("InvMass, pk particles, different sign");
   TH1F *h_decayed_invmass = (TH1F *)FileData->Get("Invariant Mass of decayed particles");
+  
+  //Invariant mass canvas creation
+  TCanvas *multiCanvas2 = new TCanvas("multiCanvas2", "Distribuzioni", 800, 800);
+  multiCanvas2->Divide(2, 2);
 
+  //Invariant mass - all particles
+  multiCanvas2->cd(1);
   TH1F *sub12 = new TH1F("sub12", "sub12", 200, 0, 2);
-
-  sub12->Add(h_samecharge_invmass, 1);
-  sub12->Add(h_diffcharge_invmass, -1);
-  TCanvas *c5 = new TCanvas("c5", "Subtraction 1 - 2", 200, 10, 600, 400);
+  sub12->Add(h_diffcharge_invmass, 1);
+  sub12->Add(h_samecharge_invmass, -1);
   TF1 *sub12Fit = new TF1("sub12Fit", "gaus", 0.4, 2);
   sub12->Fit(sub12Fit);
+
 
   sub12->Draw();
   sub12->Draw("E,P,SAME");
   
+  //Invariant mass - pion/kaon couple of particles
+  multiCanvas2->cd(2);
+  TH1F *sub34 = new TH1F("sub34", "sub34", 200, 0, 2);
+
+  sub34->Add(h_pk_diffsign_invmass, 1);
+  sub34->Add(h_pk_samesign_invmass, -1);
+  TF1 *sub34Fit = new TF1("sub34Fit", "gaus", 0.6, 1.6);
+  sub34->Fit(sub34Fit);
   
+  
+  sub34->Draw();
+  sub34->Draw("E,P,SAME");
+
+  //Invariant mass - decayed particles
+  multiCanvas2->cd(3);
+  TF1 *h5Fit = new TF1("h5Fit", "gaus", 0.6, 1.6);
+  h_decayed_invmass->Fit(h5Fit);
+
+  
+  h_decayed_invmass->Draw();
+  h_decayed_invmass->Draw("E,P,SAME");
+
+  //Screen prints
+  //Invariant Mass - all particles
   std::cout << "Parameters from the subtraction of histograms of Invariant Mass from all particles" << std::endl;
   std::cout << "Mean: " << sub12Fit->GetParameter(1) << " +/- " << sub12Fit->GetParError(1) << std::endl;
   std::cout << "Sigma: " << sub12Fit->GetParameter(2) << " +/- " << sub12Fit->GetParError(2) << std::endl;
@@ -157,17 +185,7 @@ void RootAnalysis() {
   std::cout << "Reduced chisquare: " << sub12Fit->GetChisquare() / sub12Fit->GetNDF() << std::endl;
   std::cout << "Probability: " << sub12Fit->GetProb() << std::endl;
 
-  TH1F *sub34 = new TH1F("sub34", "sub34", 200, 0, 2);
-
-  sub34->Add(h_pk_samesign_invmass, 1);
-  sub34->Add(h_pk_diffsign_invmass, -1);
-  TCanvas *c6 = new TCanvas("c6", "Subtraction 3 - 4", 200, 10, 600, 400);
-  TF1 *sub34Fit = new TF1("sub34Fit", "gaus", 0.6, 1.6);
-  sub34->Fit(sub34Fit);
-  
-  sub34->Draw();
-  sub34->Draw("E,P,SAME");
-
+  //Invariant Mass - pion/kaon couple of particles
   std::cout << "Parameters from the subtraction of histograms of Invariant Mass from pion/kaon couple of particles" << std::endl;
   std::cout << "Mean: " << sub34Fit->GetParameter(1) << " +/- " << sub34Fit->GetParError(1) << std::endl;
   std::cout << "Sigma: " << sub34Fit->GetParameter(2) << " +/- " << sub34Fit->GetParError(2) << std::endl;
@@ -175,11 +193,7 @@ void RootAnalysis() {
   std::cout << "Reduced chisquare: " << sub34Fit->GetChisquare() / sub34Fit->GetNDF() << std::endl;
   std::cout << "Probability: " << sub34Fit->GetProb() << std::endl;
 
-  TCanvas *c7 = new TCanvas("c7", "Invariant Mass Decad", 200, 10, 600, 400);
-  TF1 *h5Fit = new TF1("h5Fit", "gaus", 0.6, 1.6);
-  h_decayed_invmass->Fit(h5Fit);
-  h_decayed_invmass->Draw();
-
+  //Invariant Mass - decayed particles
   std::cout << "Parameters from the histogram of Invariant Mass of decayed particles" << std::endl;
   std::cout << "Mean: " << h5Fit->GetParameter(1) << " +/- " << h5Fit->GetParError(1) << std::endl;
   std::cout << "Sigma: " << h5Fit->GetParameter(2) << " +/- " << h5Fit->GetParError(2) << std::endl;

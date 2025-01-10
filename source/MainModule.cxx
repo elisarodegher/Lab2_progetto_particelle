@@ -22,13 +22,13 @@ int main(int argc, char **argv)
 
     double pi = TMath::Pi();
 
-    Particle::AddParticleType("p+", 0.13957, 1, 0.);
-    Particle::AddParticleType("q-", 0.13957, -1, 0.);
-    Particle::AddParticleType("k+", 0.49367, 1, 0.);
-    Particle::AddParticleType("l-", 0.49367, -1, 0.);
-    Particle::AddParticleType("cr+", 0.93827, 1, 0.);
-    Particle::AddParticleType("dr-", 0.93827, -1, 0.);
-    Particle::AddParticleType("e*", 0.89166, 0, 0.05);
+    Particle::AddParticleType("a", 0.13957, 1, 0.); //p+
+    Particle::AddParticleType("b", 0.13957, -1, 0.); //p-
+    Particle::AddParticleType("c", 0.49367, 1, 0.); //k+
+    Particle::AddParticleType("d", 0.49367, -1, 0.); //k-
+    Particle::AddParticleType("e", 0.93827, 1, 0.); //pr+
+    Particle::AddParticleType("f", 0.93827, -1, 0.); //pr-
+    Particle::AddParticleType("g", 0.89166, 0, 0.05); //k*
 
     gRandom->SetSeed();
 
@@ -40,18 +40,15 @@ int main(int argc, char **argv)
     TH1F *himpulse = new TH1F("Impulse", "Impulse distribution", 60., 0., 6.);
     TH1F *htrimp = new TH1F("Trasverse Impulse", "Trasverse impulse distribution", 60., 0., 6.);
     TH1F *henergy = new TH1F("Energy", "Energy distrbution", 70., 0., 7.);
-    TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution", 200., 0., 2.);
+    TH1F *h_all_invmass = new TH1F("Invariant Mass of all particles", "Invariant Mass distribution", 200., 0., 4.);
 
-    TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 2.);
-    TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 2.);
+    TH1F *h_samecharge_invmass = new TH1F("Invariant Mass of particles with concordant charge sign", "Invariant Mass of particles with concordant charge sign distribution", 200., 0., 4.);
+    TH1F *h_diffcharge_invmass = new TH1F("Invariant Mass of particles with discordant charge sign", "Invariant Mass of particles with discordant charge sign distribution", 200., 0., 4.);
 
-    TH1F *h_pk_samesign_invmass = new TH1F("InvMass, pk particles, same sign", "Invariant Mass of pk particles with same sign distribution", 200., 0., 2.);
-    TH1F *h_pk_diffsign_invmass = new TH1F("InvMass, pk particles, different sign", "Invariant Mass of pk particles with different sign distribution", 200., 0., 2.);
+    TH1F *h_pk_samesign_invmass = new TH1F("InvMass, pk particles, same sign", "Invariant Mass of pk particles with same sign distribution", 200., 0., 4.);
+    TH1F *h_pk_diffsign_invmass = new TH1F("InvMass, pk particles, different sign", "Invariant Mass of pk particles with different sign distribution", 200., 0., 4.);
 
-    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 4.); // valori messi a caso raga
-                                                                                                                                                  // senza pedice : tutte le particelle
-                                                                                                                                                  // pedice 1 : particelle escludendo le k*
-                                                                                                                                                  // pedice 2 : solo particelle k*
+    TH1F *h_decayed_invmass = new TH1F("Invariant Mass of decayed particles", "Invariant Mass of decayed particles distribution", 200., 0., 4.);
 
     for (int i = 0; i < N_events; ++i)
     {
@@ -121,8 +118,8 @@ int main(int argc, char **argv)
                 Particle figlia2;
                 if (x < 0.5)
                 {
-                    Particle pione_pos("p+", 0., 0., 0.);
-                    Particle kaone_neg("k-", 0., 0., 0.);
+                    Particle pione_pos("a", 0., 0., 0.);
+                    Particle kaone_neg("d", 0., 0., 0.);
                     particle.Decay2body(pione_pos, kaone_neg);
                     ParticleArray.push_back(pione_pos);
                     ParticleArray.push_back(kaone_neg);
@@ -131,8 +128,8 @@ int main(int argc, char **argv)
                 }
                 else
                 {
-                    Particle pione_neg("p-", 0., 0., 0.);
-                    Particle kaone_pos("k+", 0., 0., 0.);
+                    Particle pione_neg("b", 0., 0., 0.);
+                    Particle kaone_pos("c", 0., 0., 0.);
                     particle.Decay2body(pione_neg, kaone_pos);
                     ParticleArray.push_back(pione_neg);
                     ParticleArray.push_back(kaone_pos);
