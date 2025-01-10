@@ -4,7 +4,7 @@
 void RootAnalysis() {
   //Controllo della generazione
   std::cout << "Part 1: control of generation proportions" << std::endl;
-  TFile *FileData = new TFile("macros/Lab2_progetto_particelle/Histograms2.root");
+  TFile *FileData = new TFile("Histograms2.root");
 
   TH1F *hparticletypes = (TH1F *)FileData->Get("Particle types"); // leggo i 4 istogrammi
     TH1F *htheta = (TH1F *)FileData->Get("Theta angle");
